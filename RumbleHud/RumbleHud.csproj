@@ -294,6 +294,9 @@
 		<Reference Include="UnityEngine.HotReloadModule">
 			<HintPath>D:\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\Il2CppAssemblies\UnityEngine.HotReloadModule.dll</HintPath>
 		</Reference>
+		<Reference Include="UnityEngine.Il2CppAssetBundleManager">
+		  <HintPath>..\..\..\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\net6\UnityEngine.Il2CppAssetBundleManager.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine.ImageConversionModule">
 			<HintPath>D:\SteamLibrary\steamapps\common\RUMBLE\MelonLoader\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
 		</Reference>
@@ -457,6 +460,10 @@
 
 	<ItemGroup>
 		<Compile Include="Core.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
