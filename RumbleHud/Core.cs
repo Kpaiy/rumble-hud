@@ -1,7 +1,10 @@
-﻿using Il2CppRUMBLE.Managers;
+﻿using Il2CppInterop.Common;
+using Il2CppRUMBLE.Managers;
+using Il2CppSystem.Net.NetworkInformation;
 using Il2CppSystem.Security.Cryptography;
 using Il2CppTMPro;
 using MelonLoader;
+using System.ComponentModel;
 using System.Reflection.Metadata;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +17,7 @@ namespace RumbleHud
 {
     class PlayerInfo
     {
+        public string PlayFabId { get; set; }
         public string Name { get; set; }
         public int BP { get; set; }
         public int HP { get; set; }
@@ -21,10 +25,20 @@ namespace RumbleHud
         public string shiftStoneRight { get; set; }
     }
 
+    class PlayerUiElements
+    {
+        public GameObject Container { get; set; }
+        public RawImage Background { get; set; }
+        public Text Name { get; set; }
+        public Text BP { get; set; }
+    }
+
     public class Core : MelonMod
     {
         private PlayerManager playerManager = null;
+
         private List<PlayerInfo> playerInfos = null;
+        private Dictionary<string, PlayerUiElements> uiElementsByPlayer = new Dictionary<string, PlayerUiElements>();
 
         private Font font = null;
         private Texture2D background = null;
@@ -41,6 +55,7 @@ namespace RumbleHud
         private void LoadResources()
         {
             var bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
+            LoggerInstance.Msg(bundle);
             // GameObject myGameObject = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Object name goes here!"));
             font = GameObject.Instantiate(bundle.LoadAsset<Font>("GoodDogPlain"));
             background = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
@@ -53,40 +68,6 @@ namespace RumbleHud
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             uiContainer.AddComponent<CanvasScaler>();
             uiContainer.AddComponent<GraphicRaycaster>();
-
-            LoggerInstance.Msg($@"RumbleHud: ${canvas.pixelRect.ToString()}");
-
-            GameObject myText = new GameObject();
-            myText.transform.parent = uiContainer.transform;
-            myText.name = "wibble";
-
-            text = myText.AddComponent<Text>();
-            text.font = font;
-            text.text = "wobble";
-            text.fontSize = 100;
-
-            GameObject imageObject = new GameObject();
-            imageObject.transform.parent = uiContainer.transform;
-            imageObject.name = "background";
-
-            RawImage image = imageObject.AddComponent<RawImage>();
-            image.texture = background;
-            image.SetNativeSize();
-
-            var imageTransform = image.GetComponent<RectTransform>();
-            // imageTransform.sizeDelta = new Vector2(background.width, background.height);
-            imageTransform.anchorMin = new Vector2(0, 1);
-            imageTransform.anchorMax = new Vector2(0, 1);
-            imageTransform.pivot = new Vector2(0, 1); // Pivot on top left.
-            imageTransform.anchoredPosition = new Vector3(0, -100, 0);
-
-            LoggerInstance.Msg($@"RumbleHud: ${imageTransform.position}");
-            LoggerInstance.Msg($@"RumbleHud: ${imageTransform.anchoredPosition}");
-
-            // Text position
-            var rectTransform = text.GetComponent<RectTransform>();
-            rectTransform.localPosition = new Vector3(0, 0, 0);
-            rectTransform.sizeDelta = new Vector2(400, 200);
         }
 
         public override void OnUpdate()
@@ -103,18 +84,21 @@ namespace RumbleHud
                 LoadResources();
             }
 
-            // Try to iterate over the list of players.
+            // Update all player info.
             try
             {
-                var newPlayerInfos = new List<PlayerInfo>();
+                List<PlayerInfo> newPlayerInfos = new List<PlayerInfo>();
 
                 var playerEnumerator = playerManager.AllPlayers.GetEnumerator();
                 while (playerEnumerator.MoveNext())
                 {
                     var current = playerEnumerator.Current;
 
+                    string playfabId = current.Data.GeneralData.PlayFabMasterId;
+
                     PlayerInfo currentPlayerInfo = new PlayerInfo
                     {
+                        PlayFabId = playfabId,
                         Name = current.Data.GeneralData.PublicUsername,
                         BP = current.Data.GeneralData.BattlePoints,
                         HP = current.Data.HealthPoints,
@@ -129,29 +113,111 @@ namespace RumbleHud
                 // LoggerInstance.Msg(ex.ToString());
             }
 
+            // Make new canvases if required, update if existing, for each player.
+            foreach (var playerInfo in playerInfos)
+            {
+                if (!uiElementsByPlayer.ContainsKey(playerInfo.PlayFabId))
+                {
+                    CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count * 2);
+                    LoggerInstance.Msg($"RumbleHud: Created Element for player {playerInfo.Name}.");
+                    continue;
+                }
+
+                UpdatePlayerUi(playerInfo);
+            }
+
             // base.OnUpdate();
         }
 
-        public override void OnGUI()
+        private void CreatePlayerUi(PlayerInfo playerInfo, int position)
         {
-            base.OnGUI(); return;
+            bool isRightAligned = position % 2 == 1;
+            int offset = (position / 2) * 150 * -1;
 
-            if (font == null || playerInfos == null) return;
+            // BACKGROUND
 
-            GUI.skin.font = font;
-            base.OnUpdate();
+            GameObject rawImageObject = new GameObject();
+            rawImageObject.transform.parent = uiContainer.transform;
+            rawImageObject.name = "background";
 
-            foreach (var playerInfo in playerInfos)
+            RawImage rawImage = rawImageObject.AddComponent<RawImage>();
+            rawImage.texture = background;
+            rawImage.SetNativeSize();
+
+            var rawImageTransform = rawImage.GetComponent<RectTransform>();
+            // imageTransform.sizeDelta = new Vector2(background.width, background.height);
+
+            // Anchor to top left.
+            rawImageTransform.anchorMin = new Vector2(0, 1);
+            rawImageTransform.anchorMax = new Vector2(0, 1);
+            rawImageTransform.pivot = new Vector2(0, 1);
+            rawImageTransform.anchoredPosition = new Vector3(0, -50 + offset, 0);
+
+            // NAME
+
+            GameObject nameObject = new GameObject();
+            nameObject.transform.parent = rawImageObject.transform;
+            Text nameText = nameObject.AddComponent<Text>();
+
+            nameText.font = font;
+            nameText.text = playerInfo.Name;
+            nameText.fontSize = 42;
+
+            // Anchor to top left.
+            var nameTextTransform = nameText.GetComponent<RectTransform>();
+            nameTextTransform.anchorMin = new Vector2(0, 1);
+            nameTextTransform.anchorMax = new Vector2(0, 1);
+            nameTextTransform.pivot = new Vector2(0, 1);
+
+            nameTextTransform.anchoredPosition = new Vector3(125, -10);
+
+            // BP
+
+            GameObject bpObject = new GameObject();
+            bpObject.transform.parent = rawImageObject.transform;
+            Text bpText = bpObject.AddComponent<Text>();
+
+            bpText.color = new Color(251f / 255, 1, 143f / 255);
+            bpText.font = font;
+            bpText.text = $"{playerInfo.BP} BP";
+            bpText.fontSize = 28;
+
+            // Anchor to top right.
+            var bpTextTransform = bpText.GetComponent<RectTransform>();
+            bpTextTransform.anchorMin = new Vector2(1, 1);
+            bpTextTransform.anchorMax = new Vector2(1, 1);
+            bpTextTransform.pivot = new Vector2(1, 1);
+
+            bpTextTransform.anchoredPosition = new Vector3(-55, -15);
+
+            uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
             {
-                DrawPlayerHud(playerInfo, false);
-                DrawPlayerHud(playerInfo, true);
+                Container = rawImageObject,
+                Background = rawImage,
+                Name = nameText,
+                BP = bpText,
+            };
+        }
+
+        private void UpdatePlayerUi(PlayerInfo playerInfo)
+        {
+
+        }
+
+        private void ClearPlayerUi()
+        {
+            foreach (var playerUiElements in uiElementsByPlayer.Values)
+            {
+                GameObject.Destroy(playerUiElements.Container);
             }
+            uiElementsByPlayer.Clear();
         }
 
         /**
          * Draws the HUD element for one player.
+         * TODO: KILL THIS.
          */
-        private void DrawPlayerHud(PlayerInfo playerInfo, bool rightSide, int yOffset = 0)
+        private void DrawPlayerHud__OLD(PlayerInfo playerInfo, bool rightSide, int yOffset = 0)
         {
             GUIStyle textRightAlign = new GUIStyle();
             textRightAlign.alignment = TextAnchor.MiddleRight;
