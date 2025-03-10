@@ -68,6 +68,11 @@ namespace RumbleHud
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             uiContainer.AddComponent<CanvasScaler>();
             uiContainer.AddComponent<GraphicRaycaster>();
+
+            GameObject.DontDestroyOnLoad(font);
+            GameObject.DontDestroyOnLoad(background);
+            GameObject.DontDestroyOnLoad(uiContainer);
+            GameObject.DontDestroyOnLoad(canvas);
         }
 
         public override void OnUpdate()
@@ -114,17 +119,20 @@ namespace RumbleHud
             }
 
             // Make new canvases if required, update if existing, for each player.
-            foreach (var playerInfo in playerInfos)
+            try
             {
-                if (!uiElementsByPlayer.ContainsKey(playerInfo.PlayFabId))
+                foreach (var playerInfo in playerInfos)
                 {
-                    CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count * 2);
-                    LoggerInstance.Msg($"RumbleHud: Created Element for player {playerInfo.Name}.");
-                    continue;
-                }
+                    if (!uiElementsByPlayer.ContainsKey(playerInfo.PlayFabId))
+                    {
+                        CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count * 2);
+                        LoggerInstance.Msg($"RumbleHud: Created Element for player {playerInfo.Name}.");
+                        continue;
+                    }
 
-                UpdatePlayerUi(playerInfo);
-            }
+                    UpdatePlayerUi(playerInfo);
+                }
+            } catch { }
 
             // base.OnUpdate();
         }
