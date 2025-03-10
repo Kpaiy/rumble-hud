@@ -125,7 +125,8 @@ namespace RumbleHud
                 {
                     if (!uiElementsByPlayer.ContainsKey(playerInfo.PlayFabId))
                     {
-                        CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count * 2);
+                        CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count);
+                        CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count);
                         LoggerInstance.Msg($"RumbleHud: Created Element for player {playerInfo.Name}.");
                         continue;
                     }
@@ -153,13 +154,25 @@ namespace RumbleHud
             rawImage.SetNativeSize();
 
             var rawImageTransform = rawImage.GetComponent<RectTransform>();
-            // imageTransform.sizeDelta = new Vector2(background.width, background.height);
+            if (isRightAligned)
+            {
+                // Anchor to top right.
+                rawImageTransform.anchorMin = new Vector2(1, 1);
+                rawImageTransform.anchorMax = new Vector2(1, 1);
+                rawImageTransform.pivot = new Vector2(1, 1);
+                rawImageTransform.anchoredPosition = new Vector3(0, -50 + offset, 0);
 
-            // Anchor to top left.
-            rawImageTransform.anchorMin = new Vector2(0, 1);
-            rawImageTransform.anchorMax = new Vector2(0, 1);
-            rawImageTransform.pivot = new Vector2(0, 1);
-            rawImageTransform.anchoredPosition = new Vector3(0, -50 + offset, 0);
+                // Flip texture.
+                rawImage.uvRect = new Rect(0, 0, -1, 1);
+            }
+            else
+            {
+                // Anchor to top left.
+                rawImageTransform.anchorMin = new Vector2(0, 1);
+                rawImageTransform.anchorMax = new Vector2(0, 1);
+                rawImageTransform.pivot = new Vector2(0, 1);
+                rawImageTransform.anchoredPosition = new Vector3(0, -50 + offset, 0);
+            }
 
             // NAME
 
@@ -171,13 +184,26 @@ namespace RumbleHud
             nameText.text = playerInfo.Name;
             nameText.fontSize = 42;
 
-            // Anchor to top left.
             var nameTextTransform = nameText.GetComponent<RectTransform>();
-            nameTextTransform.anchorMin = new Vector2(0, 1);
-            nameTextTransform.anchorMax = new Vector2(0, 1);
-            nameTextTransform.pivot = new Vector2(0, 1);
+            if (isRightAligned)
+            {
+                // Anchor top right.
+                nameTextTransform.anchorMin = new Vector2(1, 1);
+                nameTextTransform.anchorMax = new Vector2(1, 1);
+                nameTextTransform.pivot = new Vector2(1, 1);
 
-            nameTextTransform.anchoredPosition = new Vector3(125, -10);
+                nameTextTransform.anchoredPosition = new Vector3(-125, -10);
+                nameText.alignment = TextAnchor.UpperRight;
+            }
+            else
+            {
+                // Anchor to top left.
+                nameTextTransform.anchorMin = new Vector2(0, 1);
+                nameTextTransform.anchorMax = new Vector2(0, 1);
+                nameTextTransform.pivot = new Vector2(0, 1);
+
+                nameTextTransform.anchoredPosition = new Vector3(125, -10);
+            }
 
             // BP
 
@@ -190,13 +216,27 @@ namespace RumbleHud
             bpText.text = $"{playerInfo.BP} BP";
             bpText.fontSize = 28;
 
-            // Anchor to top right.
             var bpTextTransform = bpText.GetComponent<RectTransform>();
-            bpTextTransform.anchorMin = new Vector2(1, 1);
-            bpTextTransform.anchorMax = new Vector2(1, 1);
-            bpTextTransform.pivot = new Vector2(1, 1);
 
-            bpTextTransform.anchoredPosition = new Vector3(-55, -15);
+            if (isRightAligned)
+            {
+                // Anchor to top left.
+                bpTextTransform.anchorMin = new Vector2(0, 1);
+                bpTextTransform.anchorMax = new Vector2(0, 1);
+                bpTextTransform.pivot = new Vector2(0, 1);
+
+                bpTextTransform.anchoredPosition = new Vector3(55, -15);
+                bpText.alignment = TextAnchor.UpperRight;
+            }
+            else
+            {
+                // Anchor to top right.
+                bpTextTransform.anchorMin = new Vector2(1, 1);
+                bpTextTransform.anchorMax = new Vector2(1, 1);
+                bpTextTransform.pivot = new Vector2(1, 1);
+
+                bpTextTransform.anchoredPosition = new Vector3(-55, -15);
+            }
 
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
             {
