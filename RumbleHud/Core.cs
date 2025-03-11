@@ -49,7 +49,6 @@ namespace RumbleHud
 
         private GameObject uiContainer = null;
         private Canvas canvas = null;
-        private Text text = null;
 
         private readonly Color healthLow = new Color(151f / 255, 74f / 255, 69f / 255);
         private readonly Color healthMedium = new Color(139f / 255, 132f / 255, 66f / 255);
@@ -124,6 +123,7 @@ namespace RumbleHud
                 }
 
                 playerInfos = newPlayerInfos;
+                LoggerInstance.Msg("RumbleHud: Updated player info.");
             } catch (Exception ex)
             {
                 // LoggerInstance.Msg(ex.ToString());
@@ -132,17 +132,30 @@ namespace RumbleHud
             // Make new canvases if required, update if existing, for each player.
             try
             {
+                // If the amount of player UIs is not equal to the amount of player infos,
+                // nuke and rebuild.
+                // TODO: Actually be smart about this.
+                if (playerInfos.Count != uiElementsByPlayer.Count)
+                {
+                    ClearPlayerUi();
+                }
+
                 foreach (var playerInfo in playerInfos)
                 {
                     if (!uiElementsByPlayer.ContainsKey(playerInfo.PlayFabId))
                     {
                         CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count);
-                        CreatePlayerUi(playerInfo, uiElementsByPlayer.Keys.Count);
                         LoggerInstance.Msg($"RumbleHud: Created Element for player {playerInfo.Name}.");
                         continue;
                     }
 
-                    UpdatePlayerUi(playerInfo);
+                    try
+                    {
+                        UpdatePlayerUi(playerInfo);
+                    } catch (Exception ex)
+                    {
+                        LoggerInstance.Error(ex.ToString());
+                    }
                 }
             } catch { }
 
@@ -320,7 +333,33 @@ namespace RumbleHud
 
         private void UpdatePlayerUi(PlayerInfo playerInfo)
         {
+            var playerUiElements = uiElementsByPlayer[playerInfo.PlayFabId];
+
+            if (playerUiElements == null) return;
+
+            playerUiElements.BP.text = $"{playerInfo.BP} BP";
+
+            Color healthBarColor = healthFull;
             
+            if (playerInfo.HP < 20)
+            {
+                healthBarColor = healthHigh;
+            }
+            if (playerInfo.HP <= 10)
+            {
+                healthBarColor = healthMedium;
+            }
+            if (playerInfo.HP <= 5)
+            {
+                healthBarColor = healthLow;
+            }
+            
+            playerUiElements.HealthBar.color = healthBarColor;
+
+            var healthPipsTransform = playerUiElements.HealthPips.GetComponent<RectTransform>();
+            playerUiElements.HealthPips.uvRect = new Rect(0, 0, playerInfo.HP, 1);
+
+            healthPipsTransform.sizeDelta = new Vector2(healthPipsTexture.width * playerInfo.HP, healthPipsTexture.height);
         }
 
         private void ClearPlayerUi()
