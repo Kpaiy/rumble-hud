@@ -1,4 +1,5 @@
 ﻿using Il2CppInterop.Common;
+using Il2CppRUMBLE.Combat.ShiftStones;
 using Il2CppRUMBLE.Managers;
 using Il2CppRUMBLE.Players.Subsystems;
 using Il2CppSystem.Net.NetworkInformation;
@@ -16,14 +17,28 @@ using UnityEngine.UI;
 
 namespace RumbleHud
 {
+    // First element is left hand, second element is right hand.
+    enum ShiftStones
+    {
+        Empty = -1,
+        Adamant = 0,
+        Charge = 1,
+        Flow = 2,
+        Guard = 3,
+        Stubborn = 4,
+        Surge = 5,
+        Vigor = 6,
+        Volatile = 7
+    }
+
     class PlayerInfo
     {
         public string PlayFabId { get; set; }
         public string Name { get; set; }
         public int BP { get; set; }
         public int HP { get; set; }
-        public string shiftStoneLeft { get; set; }
-        public string shiftStoneRight { get; set; }
+        public ShiftStones ShiftStoneLeft { get; set; }
+        public ShiftStones ShiftStoneRight { get; set; }
     }
 
     class PlayerUiElements
@@ -34,10 +49,14 @@ namespace RumbleHud
         public Text BP { get; set; }
         public Image HealthBar { get; set; }
         public RawImage HealthPips { get; set; }
+        public RawImage ShiftStoneLeft { get; set; }
+        public RawImage ShiftStoneRight { get; set; }
     }
 
     public class Core : MelonMod
     {
+        private Il2CppAssetBundle bundle;
+
         private PlayerManager playerManager = null;
 
         private List<PlayerInfo> playerInfos = null;
@@ -46,6 +65,20 @@ namespace RumbleHud
         private Font font = null;
         private Texture2D backgroundTexture = null;
         private Texture2D healthPipsTexture = null;
+
+        private Dictionary<ShiftStones, string> shiftStoneResourceNames = new Dictionary<ShiftStones, string>()
+        {
+            {ShiftStones.Empty, "ss_empty"},
+            {ShiftStones.Adamant, "ss_adamant"},
+            {ShiftStones.Charge, "ss_charge"},
+            {ShiftStones.Flow, "ss_flow"},
+            {ShiftStones.Guard, "ss_guard"},
+            {ShiftStones.Stubborn, "ss_stubborn"},
+            {ShiftStones.Surge, "ss_surge"},
+            {ShiftStones.Vigor, "ss_vigor"},
+            {ShiftStones.Volatile, "ss_volatile"}
+        };
+        private Dictionary<ShiftStones, Texture2D> shiftStoneTextures = new Dictionary<ShiftStones, Texture2D>();
 
         private GameObject uiContainer = null;
         private Canvas canvas = null;
@@ -60,10 +93,18 @@ namespace RumbleHud
             LoggerInstance.Msg("RumbleHud: Initialized.");
         }
 
+        private void LoadShiftStoneTexture(Il2CppAssetBundle bundle, ShiftStones shiftStone)
+        {
+            var resourceName = shiftStoneResourceNames[shiftStone];
+            var shiftStoneTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>(resourceName));
+            shiftStoneTextures[shiftStone] = shiftStoneTexture;
+            GameObject.DontDestroyOnLoad(shiftStoneTexture);
+            LoggerInstance.Msg($"RumbleHud: Loaded texture for {shiftStone}.");
+        }
+
         private void LoadResources()
         {
-            var bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
-            LoggerInstance.Msg(bundle);
+            bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
             // GameObject myGameObject = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Object name goes here!"));
             font = GameObject.Instantiate(bundle.LoadAsset<Font>("GoodDogPlain"));
             backgroundTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
@@ -77,6 +118,17 @@ namespace RumbleHud
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             uiContainer.AddComponent<CanvasScaler>();
             uiContainer.AddComponent<GraphicRaycaster>();
+
+            // TODO: Do this iteratively, you fool.
+            LoadShiftStoneTexture(bundle, ShiftStones.Empty);
+            LoadShiftStoneTexture(bundle, ShiftStones.Adamant);
+            LoadShiftStoneTexture(bundle, ShiftStones.Charge);
+            LoadShiftStoneTexture(bundle, ShiftStones.Flow);
+            LoadShiftStoneTexture(bundle, ShiftStones.Guard);
+            LoadShiftStoneTexture(bundle, ShiftStones.Stubborn);
+            LoadShiftStoneTexture(bundle, ShiftStones.Surge);
+            LoadShiftStoneTexture(bundle, ShiftStones.Vigor);
+            LoadShiftStoneTexture(bundle, ShiftStones.Volatile);
 
             GameObject.DontDestroyOnLoad(font);
             GameObject.DontDestroyOnLoad(backgroundTexture);
@@ -117,13 +169,14 @@ namespace RumbleHud
                         Name = current.Data.GeneralData.PublicUsername,
                         BP = current.Data.GeneralData.BattlePoints,
                         HP = current.Data.HealthPoints,
+                        ShiftStoneLeft = (ShiftStones)current.Data.EquipedShiftStones[0],
+                        ShiftStoneRight = (ShiftStones)current.Data.EquipedShiftStones[1],
                     };
 
                     newPlayerInfos.Add(currentPlayerInfo);
                 }
 
                 playerInfos = newPlayerInfos;
-                LoggerInstance.Msg("RumbleHud: Updated player info.");
             } catch (Exception ex)
             {
                 // LoggerInstance.Msg(ex.ToString());
@@ -320,6 +373,68 @@ namespace RumbleHud
                 healthPipsTransform.anchoredPosition = new Vector2(0, 0);
             }
 
+            // LEFT SHIFT STONE
+
+            GameObject leftShiftStoneObject = new GameObject();
+            leftShiftStoneObject.transform.parent = backgroundObject.transform;
+            RawImage leftShiftStone = leftShiftStoneObject.AddComponent<RawImage>();
+
+            leftShiftStone.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
+
+            var leftShiftStoneTransform = leftShiftStoneObject.GetComponent<RectTransform>();
+
+            leftShiftStoneTransform.sizeDelta = new Vector2(35, 35);
+
+            if (isRightAligned)
+            {
+                // Anchor to bottom right.
+                leftShiftStoneTransform.anchorMin = new Vector2(1, 0);
+                leftShiftStoneTransform.anchorMax = new Vector2(1, 0);
+                leftShiftStoneTransform.pivot = new Vector2(1, 0);
+
+                leftShiftStoneTransform.anchoredPosition = new Vector2(-55, 10);
+            } else
+            {
+                // Anchor to bottom left.
+                leftShiftStoneTransform.anchorMin = new Vector2(0, 0);
+                leftShiftStoneTransform.anchorMax = new Vector2(0, 0);
+                leftShiftStoneTransform.pivot = new Vector2(0, 0);
+
+                leftShiftStoneTransform.anchoredPosition = new Vector2(10, 10);
+            }
+
+            // RIGHT SHIFT STONE
+
+            GameObject rightShiftStoneObject = new GameObject();
+            rightShiftStoneObject.transform.parent = backgroundObject.transform;
+            RawImage rightShiftStone = rightShiftStoneObject.AddComponent<RawImage>();
+
+            rightShiftStone.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
+
+            var rightShiftStoneTransform = rightShiftStoneObject.GetComponent<RectTransform>();
+
+            rightShiftStoneTransform.sizeDelta = new Vector2(35, 35);
+
+            if (isRightAligned)
+            {
+                // Anchor to bottom right.
+                rightShiftStoneTransform.anchorMin = new Vector2(1, 0);
+                rightShiftStoneTransform.anchorMax = new Vector2(1, 0);
+                rightShiftStoneTransform.pivot = new Vector2(1, 0);
+
+                rightShiftStoneTransform.anchoredPosition = new Vector2(-10, 10);
+            }
+            else
+            {
+                // Anchor to bottom left.
+                rightShiftStoneTransform.anchorMin = new Vector2(0, 0);
+                rightShiftStoneTransform.anchorMax = new Vector2(0, 0);
+                rightShiftStoneTransform.pivot = new Vector2(0, 0);
+
+                rightShiftStoneTransform.anchoredPosition = new Vector2(55, 10);
+            }
+
+
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
             {
                 Container = backgroundObject,
@@ -328,6 +443,8 @@ namespace RumbleHud
                 BP = bpText,
                 HealthBar = healthBar,
                 HealthPips = healthPips,
+                ShiftStoneLeft = leftShiftStone,
+                ShiftStoneRight = rightShiftStone,
             };
         }
 
@@ -360,6 +477,18 @@ namespace RumbleHud
             playerUiElements.HealthPips.uvRect = new Rect(0, 0, playerInfo.HP, 1);
 
             healthPipsTransform.sizeDelta = new Vector2(healthPipsTexture.width * playerInfo.HP, healthPipsTexture.height);
+
+            if (shiftStoneTextures[playerInfo.ShiftStoneLeft] == null)
+            {
+                // LoggerInstance.Error("Null shift stone texture"); return;
+                LoadShiftStoneTexture(bundle, playerInfo.ShiftStoneLeft);
+            }
+            if (shiftStoneTextures[playerInfo.ShiftStoneRight] == null)
+            {
+                LoadShiftStoneTexture(bundle, playerInfo.ShiftStoneRight);
+            }
+            playerUiElements.ShiftStoneLeft.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
+            playerUiElements.ShiftStoneRight.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
         }
 
         private void ClearPlayerUi()
