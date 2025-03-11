@@ -260,8 +260,12 @@ namespace RumbleHud
             nameText.font = font;
             nameText.text = playerInfo.Name;
             nameText.fontSize = 42;
+            nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             var nameTextTransform = nameText.GetComponent<RectTransform>();
+            nameTextTransform.sizeDelta = new Vector2(300, 50);
+            nameText.resizeTextForBestFit = true;
+            nameText.resizeTextMaxSize = 42;
             if (isRightAligned)
             {
                 // Anchor top right.
