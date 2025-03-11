@@ -1,5 +1,6 @@
 ﻿using Il2CppInterop.Common;
 using Il2CppRUMBLE.Managers;
+using Il2CppRUMBLE.Players.Subsystems;
 using Il2CppSystem.Net.NetworkInformation;
 using Il2CppSystem.Security.Cryptography;
 using Il2CppTMPro;
@@ -31,6 +32,8 @@ namespace RumbleHud
         public RawImage Background { get; set; }
         public Text Name { get; set; }
         public Text BP { get; set; }
+        public Image HealthBar { get; set; }
+        public RawImage HealthPips { get; set; }
     }
 
     public class Core : MelonMod
@@ -41,11 +44,17 @@ namespace RumbleHud
         private Dictionary<string, PlayerUiElements> uiElementsByPlayer = new Dictionary<string, PlayerUiElements>();
 
         private Font font = null;
-        private Texture2D background = null;
+        private Texture2D backgroundTexture = null;
+        private Texture2D healthPipsTexture = null;
 
         private GameObject uiContainer = null;
         private Canvas canvas = null;
         private Text text = null;
+
+        private readonly Color healthLow = new Color(151f / 255, 74f / 255, 69f / 255);
+        private readonly Color healthMedium = new Color(139f / 255, 132f / 255, 66f / 255);
+        private readonly Color healthHigh = new Color(96f / 255, 142f / 255, 83f / 255);
+        private readonly Color healthFull = new Color(124f / 255, 150f / 255, 171f / 255);
 
         public override void OnInitializeMelon()
         {
@@ -58,7 +67,8 @@ namespace RumbleHud
             LoggerInstance.Msg(bundle);
             // GameObject myGameObject = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Object name goes here!"));
             font = GameObject.Instantiate(bundle.LoadAsset<Font>("GoodDogPlain"));
-            background = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
+            backgroundTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
+            healthPipsTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HealthPip"));
 
             uiContainer = new GameObject();
             uiContainer.name = "Canvas";
@@ -70,7 +80,8 @@ namespace RumbleHud
             uiContainer.AddComponent<GraphicRaycaster>();
 
             GameObject.DontDestroyOnLoad(font);
-            GameObject.DontDestroyOnLoad(background);
+            GameObject.DontDestroyOnLoad(backgroundTexture);
+            GameObject.DontDestroyOnLoad(healthPipsTexture);
             GameObject.DontDestroyOnLoad(uiContainer);
             GameObject.DontDestroyOnLoad(canvas);
         }
@@ -145,12 +156,12 @@ namespace RumbleHud
 
             // BACKGROUND
 
-            GameObject rawImageObject = new GameObject();
-            rawImageObject.transform.parent = uiContainer.transform;
-            rawImageObject.name = "background";
+            GameObject backgroundObject = new GameObject();
+            backgroundObject.transform.parent = uiContainer.transform;
+            backgroundObject.name = "background";
 
-            RawImage rawImage = rawImageObject.AddComponent<RawImage>();
-            rawImage.texture = background;
+            RawImage rawImage = backgroundObject.AddComponent<RawImage>();
+            rawImage.texture = backgroundTexture;
             rawImage.SetNativeSize();
 
             var rawImageTransform = rawImage.GetComponent<RectTransform>();
@@ -177,7 +188,7 @@ namespace RumbleHud
             // NAME
 
             GameObject nameObject = new GameObject();
-            nameObject.transform.parent = rawImageObject.transform;
+            nameObject.transform.parent = backgroundObject.transform;
             Text nameText = nameObject.AddComponent<Text>();
 
             nameText.font = font;
@@ -208,7 +219,7 @@ namespace RumbleHud
             // BP
 
             GameObject bpObject = new GameObject();
-            bpObject.transform.parent = rawImageObject.transform;
+            bpObject.transform.parent = backgroundObject.transform;
             Text bpText = bpObject.AddComponent<Text>();
 
             bpText.color = new Color(251f / 255, 1, 143f / 255);
@@ -238,18 +249,78 @@ namespace RumbleHud
                 bpTextTransform.anchoredPosition = new Vector3(-55, -15);
             }
 
+            // HEALTH BAR
+
+            GameObject healthBarObject = new GameObject();
+            healthBarObject.transform.parent = backgroundObject.transform;
+            Image healthBar = healthBarObject.AddComponent<Image>();
+            healthBar.color = healthFull;
+
+            var healthBarTransform = healthBar.GetComponent<RectTransform>();
+            healthBarTransform.sizeDelta = new Vector2(340, 10);
+            if (isRightAligned)
+            {
+                // Anchor to bottom left.
+                healthBarTransform.anchorMin = new Vector2(0, 0);
+                healthBarTransform.anchorMax = new Vector2(0, 0);
+                healthBarTransform.pivot = new Vector2(0, 0);
+
+                healthBarTransform.anchoredPosition = new Vector2(100, 20);
+            } else
+            {
+                // Anchor to bottom right.
+                healthBarTransform.anchorMin = new Vector2(1, 0);
+                healthBarTransform.anchorMax = new Vector2(1, 0);
+                healthBarTransform.pivot = new Vector2(1, 0);
+
+                healthBarTransform.anchoredPosition = new Vector2(-100, 20);
+            }
+
+            //  HEALTH PIPS
+            
+            GameObject healthPipsObject = new GameObject();
+            healthPipsObject.transform.parent = healthBarObject.transform;
+            RawImage healthPips = healthPipsObject.AddComponent<RawImage>();
+
+            healthPips.texture = healthPipsTexture;
+
+            healthPips.uvRect = new Rect(0, 0, 20, 1);
+
+            var healthPipsTransform = healthPips.GetComponent<RectTransform>();
+            healthPipsTransform.sizeDelta = new Vector2(healthPipsTexture.width * 20, healthPipsTexture.height);
+
+            if (isRightAligned)
+            {
+                // Anchor to middle right.
+                healthPipsTransform.anchorMin = new Vector2(1, 0.5f);
+                healthPipsTransform.anchorMax = new Vector2(1, 0.5f);
+                healthPipsTransform.pivot = new Vector2(1, 0.5f);
+
+                healthPipsTransform.anchoredPosition = new Vector2(0, 0);
+            } else
+            {
+                // Anchor to middle left.
+                healthPipsTransform.anchorMin = new Vector2(0, 0.5f);
+                healthPipsTransform.anchorMax = new Vector2(0, 0.5f);
+                healthPipsTransform.pivot = new Vector2(0, 0.5f);
+
+                healthPipsTransform.anchoredPosition = new Vector2(0, 0);
+            }
+
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
             {
-                Container = rawImageObject,
+                Container = backgroundObject,
                 Background = rawImage,
                 Name = nameText,
                 BP = bpText,
+                HealthBar = healthBar,
+                HealthPips = healthPips,
             };
         }
 
         private void UpdatePlayerUi(PlayerInfo playerInfo)
         {
-
+            
         }
 
         private void ClearPlayerUi()
@@ -278,7 +349,7 @@ namespace RumbleHud
                 ScaleMode.StretchToFill,
                 true,
                 1); */
-            GUI.Box(new Rect(rightSide ? Screen.width - 550 : 0, 50 + yOffset, 550, 100), background);
+            GUI.Box(new Rect(rightSide ? Screen.width - 550 : 0, 50 + yOffset, 550, 100), backgroundTexture);
             if (rightSide)
             {
                 GUI.Label(new Rect(Screen.width - 550 + 25, 50 + yOffset, 550 - 125, 50), $"<color=white>{playerInfo.Name}</color>", textRightAlign);
