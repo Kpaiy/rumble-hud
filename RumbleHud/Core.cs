@@ -597,18 +597,19 @@ namespace RumbleHud
             playerUiElements.ShiftStoneLeft.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
             playerUiElements.ShiftStoneRight.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
             
-            // TODO: Generalise this.
             if (playerUiElements.PortraitGenerated)
             {
                 playerUiElements.HeadshotCamera.gameObject.SetActive(false);
             }
 
-            // TODO: Generalise this.
-            if (previewHead != null && !playerUiElements.PortraitGenerated)
+            if (!playerUiElements.PortraitGenerated)
             {
-                PointCamera(playerUiElements.HeadshotCamera, previewHead, playerUiElements.IsRightAligned);
-
-                playerUiElements.PortraitGenerated = true;
+                GameObject head = GetPlayerHead(playerInfo.PlayFabId);
+                if (head != null)
+                {
+                    PointCamera(playerUiElements.HeadshotCamera, previewHead, playerUiElements.IsRightAligned);
+                    playerUiElements.PortraitGenerated = true;
+                }
             }
         }
 
