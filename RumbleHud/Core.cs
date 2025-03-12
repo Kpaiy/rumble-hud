@@ -57,7 +57,8 @@ namespace RumbleHud
         public RenderTexture renderTexture { get; set; }
         public RawImage Portrait { get; set; }
         public bool PortraitGenerated { get; set; }
-        public bool IsRightAligned {  get; set; }
+        public bool IsRightAligned { get; set; }
+        public string PlayFabId { get; set; }
     }
 
     public class Core : MelonMod
@@ -163,6 +164,9 @@ namespace RumbleHud
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
             if (sceneName != "Gym") return;
+
+            // Clear all player panels, including the self player.
+            ClearPlayerUi(true);
 
             // Load the preview character from the dressing room.
             // We can use them to get the player's head, since the player
@@ -553,6 +557,7 @@ namespace RumbleHud
                 Portrait = portraitImage,
                 PortraitGenerated = false,
                 IsRightAligned = isRightAligned,
+                PlayFabId = playerInfo.PlayFabId,
             };
         }
 
@@ -613,11 +618,20 @@ namespace RumbleHud
             }
         }
 
-        private void ClearPlayerUi()
+        private void ClearPlayerUi(bool includeSelfPlayer = false)
         {
             foreach (var playerUiElements in uiElementsByPlayer.Values)
             {
+                // Don't kill self normally.
+                // Currently, I only know how to generate self portrait while in the gym.
+                if (playerUiElements.PlayFabId == selfPlayFabId && !includeSelfPlayer)
+                {
+                    continue;
+                }
+
                 GameObject.Destroy(playerUiElements.Container);
+                playerUiElements.HeadshotCamera.targetTexture = null;
+                GameObject.Destroy(playerUiElements.HeadshotCamera.gameObject);
             }
             uiElementsByPlayer.Clear();
         }
