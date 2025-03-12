@@ -97,6 +97,7 @@ namespace RumbleHud
         {
             var resourceName = shiftStoneResourceNames[shiftStone];
             var shiftStoneTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>(resourceName));
+            shiftStoneTexture.name = $"PlayerHud_{shiftStone}";
             shiftStoneTextures[shiftStone] = shiftStoneTexture;
             GameObject.DontDestroyOnLoad(shiftStoneTexture);
             LoggerInstance.Msg($"RumbleHud: Loaded texture for {shiftStone}.");
@@ -107,11 +108,14 @@ namespace RumbleHud
             bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
             // GameObject myGameObject = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Object name goes here!"));
             font = GameObject.Instantiate(bundle.LoadAsset<Font>("GoodDogPlain"));
+            font.name = "PlayerHud_GoodDogPlain";
             backgroundTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
+            backgroundTexture.name = "PlayerHud_BackgroundTexture";
             healthPipsTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HealthPip"));
+            healthPipsTexture.name = "PlayerHud_HealthPipTexture";
 
             uiContainer = new GameObject();
-            uiContainer.name = "Canvas";
+            uiContainer.name = "PlayerHud_Canvas";
             uiContainer.AddComponent<Canvas>();
 
             canvas = uiContainer.GetComponent<Canvas>();
@@ -229,7 +233,7 @@ namespace RumbleHud
 
             GameObject backgroundObject = new GameObject();
             backgroundObject.transform.parent = uiContainer.transform;
-            backgroundObject.name = "background";
+            backgroundObject.name = $"PlayerHud_{playerInfo.PlayFabId}_background";
 
             RawImage rawImage = backgroundObject.AddComponent<RawImage>();
             rawImage.texture = backgroundTexture;
@@ -260,6 +264,7 @@ namespace RumbleHud
 
             GameObject nameObject = new GameObject();
             nameObject.transform.parent = backgroundObject.transform;
+            nameObject.name = $"PlayerHud_{playerInfo.PlayFabId}_name";
             Text nameText = nameObject.AddComponent<Text>();
 
             nameText.font = font;
@@ -295,6 +300,7 @@ namespace RumbleHud
 
             GameObject bpObject = new GameObject();
             bpObject.transform.parent = backgroundObject.transform;
+            bpObject.name = $"PlayerHud_{playerInfo.PlayFabId}_bp";
             Text bpText = bpObject.AddComponent<Text>();
 
             bpText.color = new Color(251f / 255, 1, 143f / 255);
@@ -328,6 +334,7 @@ namespace RumbleHud
 
             GameObject healthBarObject = new GameObject();
             healthBarObject.transform.parent = backgroundObject.transform;
+            healthBarObject.name = $"PlayerHud_{playerInfo.PlayFabId}_healthBackground";
             Image healthBar = healthBarObject.AddComponent<Image>();
             healthBar.color = healthFull;
 
@@ -355,6 +362,7 @@ namespace RumbleHud
             
             GameObject healthPipsObject = new GameObject();
             healthPipsObject.transform.parent = healthBarObject.transform;
+            healthPipsObject.name = $"PlayerHud_{playerInfo.PlayFabId}_healthPips";
             RawImage healthPips = healthPipsObject.AddComponent<RawImage>();
 
             healthPips.texture = healthPipsTexture;
@@ -386,6 +394,7 @@ namespace RumbleHud
 
             GameObject leftShiftStoneObject = new GameObject();
             leftShiftStoneObject.transform.parent = backgroundObject.transform;
+            leftShiftStoneObject.name = $"PlayerHud_{playerInfo.PlayFabId}_leftShiftStone";
             RawImage leftShiftStone = leftShiftStoneObject.AddComponent<RawImage>();
 
             leftShiftStone.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
@@ -416,6 +425,7 @@ namespace RumbleHud
 
             GameObject rightShiftStoneObject = new GameObject();
             rightShiftStoneObject.transform.parent = backgroundObject.transform;
+            rightShiftStoneObject.name = $"PlayerHud_{playerInfo.PlayFabId}_rightShiftStone";
             RawImage rightShiftStone = rightShiftStoneObject.AddComponent<RawImage>();
 
             rightShiftStone.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
