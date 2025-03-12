@@ -56,6 +56,7 @@ namespace RumbleHud
         public Camera HeadshotCamera { get; set; }
         public RenderTexture renderTexture { get; set; }
         public RawImage Portrait { get; set; }
+        public bool PortraitGenerated {  get; set; }
     }
 
     public class Core : MelonMod
@@ -548,7 +549,8 @@ namespace RumbleHud
                 ShiftStoneRight = rightShiftStone,
                 HeadshotCamera = portraitCamera,
                 renderTexture = renderTexture,
-                Portrait = portraitImage
+                Portrait = portraitImage,
+                PortraitGenerated = false,
             };
         }
 
@@ -593,11 +595,19 @@ namespace RumbleHud
             }
             playerUiElements.ShiftStoneLeft.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
             playerUiElements.ShiftStoneRight.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
+            
+            // TODO: Generalise this.
+            if (playerUiElements.PortraitGenerated)
+            {
+                playerUiElements.HeadshotCamera.gameObject.SetActive(false);
+            }
 
-            // TODO: Remove this.
-            if (previewHead != null)
+            // TODO: Generalise this.
+            if (previewHead != null && !playerUiElements.PortraitGenerated)
             {
                 PointCamera(playerUiElements.HeadshotCamera, previewHead);
+
+                playerUiElements.PortraitGenerated = true;
             }
         }
 
