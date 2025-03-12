@@ -51,6 +51,9 @@ namespace RumbleHud
         public RawImage HealthPips { get; set; }
         public RawImage ShiftStoneLeft { get; set; }
         public RawImage ShiftStoneRight { get; set; }
+        public Camera HeadshotCamera { get; set; }
+        public RenderTexture renderTexture { get; set; }
+        public RawImage Portrait { get; set; }
     }
 
     public class Core : MelonMod
@@ -453,6 +456,52 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchoredPosition = new Vector2(55, 10);
             }
 
+            // RENDER TEXTURE
+
+            var renderTexture = new RenderTexture(40, 40, 0);
+            renderTexture.Create();
+
+            // PORTRAIT CAMERA
+
+            GameObject portraitCameraObject = new GameObject();
+            portraitCameraObject.name = $"PlayerHud_{playerInfo.PlayFabId}_portraitCamera";
+
+            Camera portraitCamera = portraitCameraObject.AddComponent<Camera>();
+            portraitCamera.targetTexture = renderTexture;
+
+            GameObject.DontDestroyOnLoad(portraitCameraObject);
+
+            // PORTRAIT RAW IMAGE
+
+            GameObject portraitImageObject = new GameObject();
+            portraitImageObject.name = $"PlayerHud_{playerInfo.PlayFabId}_portrait";
+
+            RawImage portraitImage = portraitImageObject.AddComponent<RawImage>();
+            portraitImage.transform.parent = backgroundObject.transform;
+            portraitImage.texture = renderTexture;
+
+            var portraitImageTransform = portraitImage.GetComponent<RectTransform>();
+
+            portraitImageTransform.sizeDelta = new Vector2(40, 40);
+
+            if (isRightAligned)
+            {
+                // Anchor to top right.
+                portraitImageTransform.anchorMin = new Vector2(1, 1);
+                portraitImageTransform.anchorMax = new Vector2(1, 1);
+                portraitImageTransform.pivot = new Vector2(1, 1);
+
+                portraitImageTransform.anchoredPosition = new Vector2(-10, -10);
+            }
+            else
+            {
+                // Anchor to top left.
+                portraitImageTransform.anchorMin = new Vector2(0, 1);
+                portraitImageTransform.anchorMax = new Vector2(0, 1);
+                portraitImageTransform.pivot = new Vector2(0, 1);
+
+                portraitImageTransform.anchoredPosition = new Vector2(10, -10);
+            }
 
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
             {
@@ -464,6 +513,9 @@ namespace RumbleHud
                 HealthPips = healthPips,
                 ShiftStoneLeft = leftShiftStone,
                 ShiftStoneRight = rightShiftStone,
+                HeadshotCamera = portraitCamera,
+                renderTexture = renderTexture,
+                Portrait = portraitImage
             };
         }
 
