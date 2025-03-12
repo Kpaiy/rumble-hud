@@ -71,11 +71,13 @@ namespace RumbleHud
         private Texture2D backgroundTexture = null;
         private Texture2D healthPipsTexture = null;
 
-        public GameObject previewRenderer = null;
-        public GameObject previewHead = null;
+        private GameObject previewRenderer = null;
+        private GameObject previewHead = null;
 
-        public readonly int playerControllerLayerMask = LayerMask.NameToLayer("PlayerController");
-        public const int playerControllerLayer = 8388608;
+        private readonly int playerControllerLayerMask = LayerMask.NameToLayer("PlayerController");
+        private const int playerControllerLayer = 8388608;
+
+        private string selfPlayFabId = null;
 
         private Dictionary<ShiftStones, string> shiftStoneResourceNames = new Dictionary<ShiftStones, string>()
         {
@@ -156,20 +158,24 @@ namespace RumbleHud
             GameObject.DontDestroyOnLoad(canvas);
         }
 
-        public override void OnUpdate()
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            // TODO: Remove this.
-            if (previewHead == null)
-            {
-                previewHead = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
-                previewRenderer = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Renderer");
-            }
+            if (sceneName != "Gym") return;
+
+            // Load the preview character from the dressing room.
+            // We can use them to get the player's head, since the player
+            // is headless.
+            previewHead = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
+            previewRenderer = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Renderer");
 
             if (previewRenderer != null && previewRenderer.layer != playerControllerLayerMask)
             {
                 previewRenderer.layer = playerControllerLayerMask;
             }
+        }
 
+        public override void OnUpdate()
+        {
             // Get the player manager if it isn't present.
             if (playerManager == null)
             {
@@ -193,6 +199,11 @@ namespace RumbleHud
                     var current = playerEnumerator.Current;
 
                     string playfabId = current.Data.GeneralData.PlayFabMasterId;
+
+                    if (playerManager.AllPlayers.Count == 1)
+                    {
+                        selfPlayFabId = playfabId;
+                    }
 
                     PlayerInfo currentPlayerInfo = new PlayerInfo
                     {
