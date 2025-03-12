@@ -116,7 +116,12 @@ namespace RumbleHud
 
             canvas = uiContainer.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            uiContainer.AddComponent<CanvasScaler>();
+
+            var canvasScaler = uiContainer.AddComponent<CanvasScaler>();
+
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.referenceResolution = new Vector2(1920, 1008);
+
             uiContainer.AddComponent<GraphicRaycaster>();
 
             // TODO: Do this iteratively, you fool.
