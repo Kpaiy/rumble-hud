@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Reflection.Metadata;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 [assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "0.1.0", "Kpaiy", null)]
@@ -80,6 +81,7 @@ namespace RumbleHud
         };
         private Dictionary<ShiftStones, Texture2D> shiftStoneTextures = new Dictionary<ShiftStones, Texture2D>();
 
+        private GameObject canvasCameraObject { get; set; }
         private GameObject uiContainer = null;
         private Canvas canvas = null;
 
@@ -114,12 +116,26 @@ namespace RumbleHud
             healthPipsTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HealthPip"));
             healthPipsTexture.name = "RumbleHud_HealthPipTexture";
 
+            canvasCameraObject = new GameObject();
+            canvasCameraObject.name = "RumbleHud_CanvasCamera";
+            canvasCameraObject.transform.position = new Vector3(0, -25, 0);
+
+            var canvasCamera = canvasCameraObject.AddComponent<Camera>();
+            canvasCamera.orthographic = true;
+            canvasCamera.orthographicSize = 5;
+            canvasCamera.nearClipPlane = 0.3f;
+            canvasCamera.farClipPlane = 10;
+            var cameraData = canvasCamera.GetUniversalAdditionalCameraData();
+            cameraData.renderType = CameraRenderType.Overlay;
+
             uiContainer = new GameObject();
             uiContainer.name = "RumbleHud_Canvas";
             uiContainer.AddComponent<Canvas>();
 
             canvas = uiContainer.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.worldCamera = canvasCamera;
+            canvas.planeDistance = 5;
 
             var canvasScaler = uiContainer.AddComponent<CanvasScaler>();
 
@@ -144,6 +160,7 @@ namespace RumbleHud
             GameObject.DontDestroyOnLoad(healthPipsTexture);
             GameObject.DontDestroyOnLoad(uiContainer);
             GameObject.DontDestroyOnLoad(canvas);
+            GameObject.DontDestroyOnLoad(canvasCameraObject);
         }
 
         public override void OnUpdate()
