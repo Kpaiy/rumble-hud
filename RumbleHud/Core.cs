@@ -1,4 +1,5 @@
 ﻿using Il2CppInterop.Common;
+using Il2CppPhoton.Realtime;
 using Il2CppRUMBLE.Combat.ShiftStones;
 using Il2CppRUMBLE.Managers;
 using Il2CppRUMBLE.Players.Subsystems;
@@ -10,6 +11,7 @@ using System.ComponentModel;
 using System.Reflection.Metadata;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "0.1.0", "Kpaiy", null)]
@@ -68,6 +70,12 @@ namespace RumbleHud
         private Font font = null;
         private Texture2D backgroundTexture = null;
         private Texture2D healthPipsTexture = null;
+
+        public GameObject previewRenderer = null;
+        public GameObject previewHead = null;
+
+        public readonly int playerControllerLayerMask = LayerMask.NameToLayer("PlayerController");
+        public const int playerControllerLayer = 8388608;
 
         private Dictionary<ShiftStones, string> shiftStoneResourceNames = new Dictionary<ShiftStones, string>()
         {
@@ -131,7 +139,6 @@ namespace RumbleHud
 
             uiContainer.AddComponent<GraphicRaycaster>();
 
-            // TODO: Do this iteratively, you fool.
             LoadShiftStoneTexture(bundle, ShiftStones.Empty);
             LoadShiftStoneTexture(bundle, ShiftStones.Adamant);
             LoadShiftStoneTexture(bundle, ShiftStones.Charge);
@@ -151,6 +158,18 @@ namespace RumbleHud
 
         public override void OnUpdate()
         {
+            // TODO: Remove this.
+            if (previewHead == null)
+            {
+                previewHead = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
+                previewRenderer = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Renderer");
+            }
+
+            if (previewRenderer != null && previewRenderer.layer != playerControllerLayerMask)
+            {
+                previewRenderer.layer = playerControllerLayerMask;
+            }
+
             // Get the player manager if it isn't present.
             if (playerManager == null)
             {
@@ -468,6 +487,9 @@ namespace RumbleHud
 
             Camera portraitCamera = portraitCameraObject.AddComponent<Camera>();
             portraitCamera.targetTexture = renderTexture;
+            portraitCamera.fieldOfView = 50;
+            portraitCamera.cullingMask = playerControllerLayer; // TODO: No random constants pls
+            portraitCamera.clearFlags = CameraClearFlags.Depth;
 
             GameObject.DontDestroyOnLoad(portraitCameraObject);
 
@@ -560,6 +582,12 @@ namespace RumbleHud
             }
             playerUiElements.ShiftStoneLeft.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
             playerUiElements.ShiftStoneRight.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
+
+            // TODO: Remove this.
+            if (previewHead != null)
+            {
+                PointCamera(playerUiElements.HeadshotCamera, previewHead);
+            }
         }
 
         private void ClearPlayerUi()
@@ -569,6 +597,24 @@ namespace RumbleHud
                 GameObject.Destroy(playerUiElements.Container);
             }
             uiElementsByPlayer.Clear();
+        }
+
+        private void PointCamera(Camera camera, GameObject head)
+        {
+            camera.transform.position = head.transform.position;
+            // camera.transform.rotation = head.transform.rotation;
+            camera.transform.rotation = Quaternion.Euler(
+                0,
+                head.transform.rotation.eulerAngles.y,
+                0);
+
+            camera.transform.position += camera.transform.forward * 0.5f;
+            camera.transform.Rotate(0, 180, 0);
+
+            camera.transform.RotateAround(head.transform.position, camera.transform.up, 30);
+            // camera.transform.rotation = Quaternion.Euler(0, head.transform.rotation.eulerAngles.y + 180, 0);
+
+            // camera.transform.Translate(camera.transform.forward * -50);
         }
     }
 }
