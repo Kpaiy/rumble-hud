@@ -56,7 +56,8 @@ namespace RumbleHud
         public Camera HeadshotCamera { get; set; }
         public RenderTexture renderTexture { get; set; }
         public RawImage Portrait { get; set; }
-        public bool PortraitGenerated {  get; set; }
+        public bool PortraitGenerated { get; set; }
+        public bool IsRightAligned {  get; set; }
     }
 
     public class Core : MelonMod
@@ -317,7 +318,7 @@ namespace RumbleHud
                 nameTextTransform.anchorMax = new Vector2(1, 1);
                 nameTextTransform.pivot = new Vector2(1, 1);
 
-                nameTextTransform.anchoredPosition = new Vector3(-125, -10);
+                nameTextTransform.anchoredPosition = new Vector3(-100, -10);
                 nameText.alignment = TextAnchor.UpperRight;
             }
             else
@@ -327,7 +328,7 @@ namespace RumbleHud
                 nameTextTransform.anchorMax = new Vector2(0, 1);
                 nameTextTransform.pivot = new Vector2(0, 1);
 
-                nameTextTransform.anchoredPosition = new Vector3(125, -10);
+                nameTextTransform.anchoredPosition = new Vector3(100, -10);
             }
 
             // BP
@@ -351,7 +352,7 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(0, 1);
                 bpTextTransform.pivot = new Vector2(0, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(55, -15);
+                bpTextTransform.anchoredPosition = new Vector3(10, -15);
                 bpText.alignment = TextAnchor.UpperRight;
             }
             else
@@ -361,7 +362,7 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(1, 1);
                 bpTextTransform.pivot = new Vector2(1, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(-55, -15);
+                bpTextTransform.anchoredPosition = new Vector3(-10, -15);
             }
 
             // HEALTH BAR
@@ -381,7 +382,7 @@ namespace RumbleHud
                 healthBarTransform.anchorMax = new Vector2(0, 0);
                 healthBarTransform.pivot = new Vector2(0, 0);
 
-                healthBarTransform.anchoredPosition = new Vector2(100, 20);
+                healthBarTransform.anchoredPosition = new Vector2(25, 20);
             } else
             {
                 // Anchor to bottom right.
@@ -389,7 +390,7 @@ namespace RumbleHud
                 healthBarTransform.anchorMax = new Vector2(1, 0);
                 healthBarTransform.pivot = new Vector2(1, 0);
 
-                healthBarTransform.anchoredPosition = new Vector2(-100, 20);
+                healthBarTransform.anchoredPosition = new Vector2(-25, 20);
             }
 
             //  HEALTH PIPS
@@ -444,7 +445,7 @@ namespace RumbleHud
                 leftShiftStoneTransform.anchorMax = new Vector2(1, 0);
                 leftShiftStoneTransform.pivot = new Vector2(1, 0);
 
-                leftShiftStoneTransform.anchoredPosition = new Vector2(-55, 10);
+                leftShiftStoneTransform.anchoredPosition = new Vector2(-45 - 100, 10);
             } else
             {
                 // Anchor to bottom left.
@@ -452,7 +453,7 @@ namespace RumbleHud
                 leftShiftStoneTransform.anchorMax = new Vector2(0, 0);
                 leftShiftStoneTransform.pivot = new Vector2(0, 0);
 
-                leftShiftStoneTransform.anchoredPosition = new Vector2(10, 10);
+                leftShiftStoneTransform.anchoredPosition = new Vector2(100, 10);
             }
 
             // RIGHT SHIFT STONE
@@ -475,7 +476,7 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchorMax = new Vector2(1, 0);
                 rightShiftStoneTransform.pivot = new Vector2(1, 0);
 
-                rightShiftStoneTransform.anchoredPosition = new Vector2(-10, 10);
+                rightShiftStoneTransform.anchoredPosition = new Vector2(-100, 10);
             }
             else
             {
@@ -484,12 +485,12 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchorMax = new Vector2(0, 0);
                 rightShiftStoneTransform.pivot = new Vector2(0, 0);
 
-                rightShiftStoneTransform.anchoredPosition = new Vector2(55, 10);
+                rightShiftStoneTransform.anchoredPosition = new Vector2(45 + 100, 10);
             }
 
             // RENDER TEXTURE
 
-            var renderTexture = new RenderTexture(400, 400, 16);
+            var renderTexture = new RenderTexture(100, 100, 16);
             renderTexture.Create();
 
             // PORTRAIT CAMERA
@@ -516,7 +517,7 @@ namespace RumbleHud
 
             var portraitImageTransform = portraitImage.GetComponent<RectTransform>();
 
-            portraitImageTransform.sizeDelta = new Vector2(400, 400);
+            portraitImageTransform.sizeDelta = new Vector2(100, 100);
 
             if (isRightAligned)
             {
@@ -525,7 +526,7 @@ namespace RumbleHud
                 portraitImageTransform.anchorMax = new Vector2(1, 1);
                 portraitImageTransform.pivot = new Vector2(1, 1);
 
-                portraitImageTransform.anchoredPosition = new Vector2(-10, -10);
+                portraitImageTransform.anchoredPosition = new Vector2(0, 0);
             }
             else
             {
@@ -534,7 +535,7 @@ namespace RumbleHud
                 portraitImageTransform.anchorMax = new Vector2(0, 1);
                 portraitImageTransform.pivot = new Vector2(0, 1);
 
-                portraitImageTransform.anchoredPosition = new Vector2(10, -10);
+                portraitImageTransform.anchoredPosition = new Vector2(0, 0);
             }
 
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
@@ -551,6 +552,7 @@ namespace RumbleHud
                 renderTexture = renderTexture,
                 Portrait = portraitImage,
                 PortraitGenerated = false,
+                IsRightAligned = isRightAligned,
             };
         }
 
@@ -586,7 +588,6 @@ namespace RumbleHud
 
             if (shiftStoneTextures[playerInfo.ShiftStoneLeft] == null)
             {
-                // LoggerInstance.Error("Null shift stone texture"); return;
                 LoadShiftStoneTexture(bundle, playerInfo.ShiftStoneLeft);
             }
             if (shiftStoneTextures[playerInfo.ShiftStoneRight] == null)
@@ -605,7 +606,7 @@ namespace RumbleHud
             // TODO: Generalise this.
             if (previewHead != null && !playerUiElements.PortraitGenerated)
             {
-                PointCamera(playerUiElements.HeadshotCamera, previewHead);
+                PointCamera(playerUiElements.HeadshotCamera, previewHead, playerUiElements.IsRightAligned);
 
                 playerUiElements.PortraitGenerated = true;
             }
@@ -620,7 +621,15 @@ namespace RumbleHud
             uiElementsByPlayer.Clear();
         }
 
-        private void PointCamera(Camera camera, GameObject head, bool facingLeft = false)
+        private GameObject GetPlayerHead(string playFabId)
+        {
+            if (playFabId == selfPlayFabId) return previewHead;
+
+            // TODO: Get other players' heads somehow.
+            return null;
+        }
+
+        private void PointCamera(Camera camera, GameObject head, bool facingLeft)
         {
             camera.transform.position = head.transform.position;
             // camera.transform.rotation = head.transform.rotation;
