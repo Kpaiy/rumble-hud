@@ -620,7 +620,7 @@ namespace RumbleHud
             uiElementsByPlayer.Clear();
         }
 
-        private void PointCamera(Camera camera, GameObject head)
+        private void PointCamera(Camera camera, GameObject head, bool facingLeft = false)
         {
             camera.transform.position = head.transform.position;
             // camera.transform.rotation = head.transform.rotation;
@@ -632,7 +632,7 @@ namespace RumbleHud
             camera.transform.position += camera.transform.forward * 0.5f;
             camera.transform.Rotate(0, 180, 0);
 
-            camera.transform.RotateAround(head.transform.position, camera.transform.up, 30);
+            camera.transform.RotateAround(head.transform.position, camera.transform.up, facingLeft ? -30 : 30);
             // camera.transform.rotation = Quaternion.Euler(0, head.transform.rotation.eulerAngles.y + 180, 0);
 
             // camera.transform.Translate(camera.transform.forward * -50);
