@@ -458,7 +458,7 @@ namespace RumbleHud
 
             // RENDER TEXTURE
 
-            var renderTexture = new RenderTexture(40, 40, 0);
+            var renderTexture = new RenderTexture(400, 400, 16);
             renderTexture.Create();
 
             // PORTRAIT CAMERA
@@ -482,7 +482,7 @@ namespace RumbleHud
 
             var portraitImageTransform = portraitImage.GetComponent<RectTransform>();
 
-            portraitImageTransform.sizeDelta = new Vector2(40, 40);
+            portraitImageTransform.sizeDelta = new Vector2(400, 400);
 
             if (isRightAligned)
             {
