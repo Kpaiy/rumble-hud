@@ -445,7 +445,7 @@ namespace RumbleHud
                 leftShiftStoneTransform.anchorMax = new Vector2(1, 0);
                 leftShiftStoneTransform.pivot = new Vector2(1, 0);
 
-                leftShiftStoneTransform.anchoredPosition = new Vector2(-45 - 100, 10);
+                leftShiftStoneTransform.anchoredPosition = new Vector2(-40 - 100, 10);
             } else
             {
                 // Anchor to bottom left.
@@ -453,7 +453,7 @@ namespace RumbleHud
                 leftShiftStoneTransform.anchorMax = new Vector2(0, 0);
                 leftShiftStoneTransform.pivot = new Vector2(0, 0);
 
-                leftShiftStoneTransform.anchoredPosition = new Vector2(100, 10);
+                leftShiftStoneTransform.anchoredPosition = new Vector2(95, 10);
             }
 
             // RIGHT SHIFT STONE
@@ -476,7 +476,7 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchorMax = new Vector2(1, 0);
                 rightShiftStoneTransform.pivot = new Vector2(1, 0);
 
-                rightShiftStoneTransform.anchoredPosition = new Vector2(-100, 10);
+                rightShiftStoneTransform.anchoredPosition = new Vector2(-95, 10);
             }
             else
             {
@@ -485,7 +485,7 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchorMax = new Vector2(0, 0);
                 rightShiftStoneTransform.pivot = new Vector2(0, 0);
 
-                rightShiftStoneTransform.anchoredPosition = new Vector2(45 + 100, 10);
+                rightShiftStoneTransform.anchoredPosition = new Vector2(40 + 100, 10);
             }
 
             // RENDER TEXTURE
