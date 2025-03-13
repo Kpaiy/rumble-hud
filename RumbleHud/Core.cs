@@ -58,7 +58,7 @@ namespace RumbleHud
         public Camera HeadshotCamera { get; set; }
         public RenderTexture renderTexture { get; set; }
         public RawImage Portrait { get; set; }
-        public bool PortraitGenerated { get; set; }
+        public int PortraitGenerated { get; set; }
         public bool IsRightAligned { get; set; }
         public string PlayFabId { get; set; }
     }
@@ -558,7 +558,7 @@ namespace RumbleHud
                 HeadshotCamera = portraitCamera,
                 renderTexture = renderTexture,
                 Portrait = portraitImage,
-                PortraitGenerated = false,
+                PortraitGenerated = -30,
                 IsRightAligned = isRightAligned,
                 PlayFabId = playerInfo.PlayFabId,
             };
@@ -605,12 +605,12 @@ namespace RumbleHud
             playerUiElements.ShiftStoneLeft.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
             playerUiElements.ShiftStoneRight.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
             
-            if (playerUiElements.PortraitGenerated)
+            if (playerUiElements.PortraitGenerated > 0)
             {
                 playerUiElements.HeadshotCamera.gameObject.SetActive(false);
             }
 
-            if (!playerUiElements.PortraitGenerated)
+            if (playerUiElements.PortraitGenerated <= 0)
             {
                 GameObject head = GetPlayerHead(playerInfo.PlayFabId, playerInfo.PlayerController);
                 GameObject visuals = GetPlayerVisuals(playerInfo.PlayFabId, playerInfo.PlayerController);
@@ -621,7 +621,7 @@ namespace RumbleHud
                         LoggerInstance.Msg($"{playerUiElements.HeadshotCamera}, {head}, {playerUiElements.IsRightAligned}");
                     }
                     PointCamera(playerUiElements.HeadshotCamera, head, visuals, playerUiElements.IsRightAligned);
-                    playerUiElements.PortraitGenerated = true;
+                    playerUiElements.PortraitGenerated++;
                 }
             }
         }
