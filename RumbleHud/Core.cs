@@ -168,7 +168,10 @@ namespace RumbleHud
             if (sceneName != "Gym") return;
 
             // Clear all player panels, including the self player.
-            // ClearPlayerUi(true);
+            // This is a workaround to allow the player to regenerate their
+            // own profile picture by re-entering the gym after modifying
+            // their character.
+            ClearPlayerUi(true);
 
             // Load the preview character from the dressing room.
             // We can use them to get the player's head, since the player
