@@ -2,6 +2,7 @@
 using Il2CppPhoton.Realtime;
 using Il2CppRUMBLE.Combat.ShiftStones;
 using Il2CppRUMBLE.Managers;
+using Il2CppRUMBLE.Players;
 using Il2CppRUMBLE.Players.Subsystems;
 using Il2CppSystem.Net.NetworkInformation;
 using Il2CppSystem.Security.Cryptography;
@@ -41,6 +42,7 @@ namespace RumbleHud
         public int HP { get; set; }
         public ShiftStones ShiftStoneLeft { get; set; }
         public ShiftStones ShiftStoneRight { get; set; }
+        public PlayerController PlayerController { get; set; }
     }
 
     class PlayerUiElements
@@ -166,7 +168,7 @@ namespace RumbleHud
             if (sceneName != "Gym") return;
 
             // Clear all player panels, including the self player.
-            ClearPlayerUi(true);
+            // ClearPlayerUi(true);
 
             // Load the preview character from the dressing room.
             // We can use them to get the player's head, since the player
@@ -219,6 +221,7 @@ namespace RumbleHud
                         HP = current.Data.HealthPoints,
                         ShiftStoneLeft = (ShiftStones)current.Data.EquipedShiftStones[0],
                         ShiftStoneRight = (ShiftStones)current.Data.EquipedShiftStones[1],
+                        PlayerController = current.Controller,
                     };
 
                     newPlayerInfos.Add(currentPlayerInfo);
@@ -609,10 +612,15 @@ namespace RumbleHud
 
             if (!playerUiElements.PortraitGenerated)
             {
-                GameObject head = GetPlayerHead(playerInfo.PlayFabId);
+                GameObject head = GetPlayerHead(playerInfo.PlayFabId, playerInfo.PlayerController);
+                GameObject visuals = GetPlayerVisuals(playerInfo.PlayFabId, playerInfo.PlayerController);
                 if (head != null)
                 {
-                    PointCamera(playerUiElements.HeadshotCamera, previewHead, playerUiElements.IsRightAligned);
+                    if (playerInfo.PlayFabId != selfPlayFabId)
+                    {
+                        LoggerInstance.Msg($"{playerUiElements.HeadshotCamera}, {head}, {playerUiElements.IsRightAligned}");
+                    }
+                    PointCamera(playerUiElements.HeadshotCamera, head, visuals, playerUiElements.IsRightAligned);
                     playerUiElements.PortraitGenerated = true;
                 }
             }
@@ -632,25 +640,71 @@ namespace RumbleHud
                 GameObject.Destroy(playerUiElements.Container);
                 playerUiElements.HeadshotCamera.targetTexture = null;
                 GameObject.Destroy(playerUiElements.HeadshotCamera.gameObject);
+
+                uiElementsByPlayer.Remove(playerUiElements.PlayFabId);
             }
-            uiElementsByPlayer.Clear();
+            // uiElementsByPlayer.Clear();
         }
 
-        private GameObject GetPlayerHead(string playFabId)
+        private GameObject GetPlayerVisuals(string playFabId, PlayerController playerController)
+        {
+            if (playFabId == selfPlayFabId)
+            {
+                return GetPlayerHead(playFabId, null);
+            };
+
+            if (playerController == null) return null;
+
+            var controllerObject = playerController.gameObject;
+
+            if (!controllerObject.active) return null;
+
+            return controllerObject?.transform?.GetChild(0).gameObject;
+        }
+
+        private GameObject GetPlayerHead(string playFabId, PlayerController playerController)
         {
             if (playFabId == selfPlayFabId) return previewHead;
 
-            // TODO: Get other players' heads somehow.
-            return null;
+            if (playerController == null) return null;
+
+            var controllerObject = playerController.gameObject;
+
+            if (!controllerObject.active) return null;
+            // If the renderer aren't visible, also cancel.
+            var skinnedMeshRenderer = controllerObject?.transform
+                ?.GetChild(0)
+                ?.GetChild(0)
+                ?.GetComponent<SkinnedMeshRenderer>();
+            if (skinnedMeshRenderer == null) return null;
+            if (!skinnedMeshRenderer.isVisible || !skinnedMeshRenderer.enabled)
+            {
+                return null;
+            }
+
+            // From the controller object, get the nose bone.
+            // Controller > Visuals > Skelington > Pelvis > Spine > Chest > Neck > Head > Nose
+            var noseTransform = controllerObject?.transform
+                ?.GetChild(0) // Visuals
+                ?.GetChild(1) // Skelington
+                ?.GetChild(0) // Pelvis
+                ?.GetChild(4) // Spine
+                ?.GetChild(0) // Chest
+                ?.GetChild(0) // Neck
+                ?.GetChild(0) // Head
+                ?.GetChild(9); // Nose
+
+            return noseTransform?.gameObject;
         }
 
-        private void PointCamera(Camera camera, GameObject head, bool facingLeft)
+        private void PointCamera(Camera camera, GameObject head, GameObject visuals, bool facingLeft)
         {
             camera.transform.position = head.transform.position;
-            // camera.transform.rotation = head.transform.rotation;
+
+            // Get the rotation from Visuals.
             camera.transform.rotation = Quaternion.Euler(
                 0,
-                head.transform.rotation.eulerAngles.y,
+                visuals.transform.rotation.eulerAngles.y,
                 0);
 
             camera.transform.position += camera.transform.forward * 0.5f;
