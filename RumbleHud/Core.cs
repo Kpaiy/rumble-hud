@@ -230,7 +230,6 @@ namespace RumbleHud
                 playerInfos = newPlayerInfos;
             } catch (Exception ex)
             {
-                // LoggerInstance.Msg(ex.ToString());
             }
 
             // Make new canvases if required, update if existing, for each player.
@@ -257,9 +256,7 @@ namespace RumbleHud
                     {
                         UpdatePlayerUi(playerInfo);
                     } catch (Exception ex)
-                    {
-                        LoggerInstance.Error(ex.ToString());
-                    }
+                    { }
                 }
             } catch { }
 
