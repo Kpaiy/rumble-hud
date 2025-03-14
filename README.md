@@ -31,6 +31,7 @@ Once a release is available:
 
 ## Future Goals
 
+- Code cleanup; everything is in one C# file at the moment.
 - Integrate with RumbleModUI to expose configuration options:
   - Hide or show HUD
   - Re-generate player portraits
