@@ -38,3 +38,7 @@ Once a release is available:
   - Rearrange ordering of players on the HUD.
 - Investigate LIV support
 - Score tracking
+
+## Thanks
+
+- **SDRAWKCABMIAY**: Provided shift stone sprites
