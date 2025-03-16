@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -462,6 +462,7 @@
 		<Compile Include="Core.cs" />
 		<Compile Include="PlayerInfo.cs" />
 		<Compile Include="PlayerUiElements.cs" />
+		<Compile Include="Resources.cs" />
 		<Compile Include="ShiftStones.cs" />
 	</ItemGroup>
 

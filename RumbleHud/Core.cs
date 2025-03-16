@@ -23,16 +23,10 @@ namespace RumbleHud
 {
     public class Core : MelonMod
     {
-        private Il2CppAssetBundle bundle;
-
         private PlayerManager playerManager = null;
 
         private List<PlayerInfo> playerInfos = null;
         private Dictionary<string, PlayerUiElements> uiElementsByPlayer = new Dictionary<string, PlayerUiElements>();
-
-        private Font font = null;
-        private Texture2D backgroundTexture = null;
-        private Texture2D healthPipsTexture = null;
 
         private GameObject previewRenderer = null;
         private GameObject previewHead = null;
@@ -41,20 +35,6 @@ namespace RumbleHud
         private const int playerControllerLayer = 8388608;
 
         private string selfPlayFabId = null;
-
-        private Dictionary<ShiftStones, string> shiftStoneResourceNames = new Dictionary<ShiftStones, string>()
-        {
-            {ShiftStones.Empty, "ss_empty"},
-            {ShiftStones.Adamant, "ss_adamant"},
-            {ShiftStones.Charge, "ss_charge"},
-            {ShiftStones.Flow, "ss_flow"},
-            {ShiftStones.Guard, "ss_guard"},
-            {ShiftStones.Stubborn, "ss_stubborn"},
-            {ShiftStones.Surge, "ss_surge"},
-            {ShiftStones.Vigor, "ss_vigor"},
-            {ShiftStones.Volatile, "ss_volatile"}
-        };
-        private Dictionary<ShiftStones, Texture2D> shiftStoneTextures = new Dictionary<ShiftStones, Texture2D>();
 
         private GameObject uiContainer = null;
         private Canvas canvas = null;
@@ -69,26 +49,9 @@ namespace RumbleHud
             LoggerInstance.Msg("RumbleHud: Initialized.");
         }
 
-        private void LoadShiftStoneTexture(Il2CppAssetBundle bundle, ShiftStones shiftStone)
+        private void Initialize()
         {
-            var resourceName = shiftStoneResourceNames[shiftStone];
-            var shiftStoneTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>(resourceName));
-            shiftStoneTexture.name = $"RumbleHud_{shiftStone}";
-            shiftStoneTextures[shiftStone] = shiftStoneTexture;
-            GameObject.DontDestroyOnLoad(shiftStoneTexture);
-            LoggerInstance.Msg($"RumbleHud: Loaded texture for {shiftStone}.");
-        }
-
-        private void LoadResources()
-        {
-            bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
-            // GameObject myGameObject = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Object name goes here!"));
-            font = GameObject.Instantiate(bundle.LoadAsset<Font>("GoodDogPlain"));
-            font.name = "RumbleHud_GoodDogPlain";
-            backgroundTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
-            backgroundTexture.name = "RumbleHud_BackgroundTexture";
-            healthPipsTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HealthPip"));
-            healthPipsTexture.name = "RumbleHud_HealthPipTexture";
+            Resources.LoadResources();
 
             uiContainer = new GameObject();
             uiContainer.name = "RumbleHud_Canvas";
@@ -104,19 +67,6 @@ namespace RumbleHud
 
             uiContainer.AddComponent<GraphicRaycaster>();
 
-            LoadShiftStoneTexture(bundle, ShiftStones.Empty);
-            LoadShiftStoneTexture(bundle, ShiftStones.Adamant);
-            LoadShiftStoneTexture(bundle, ShiftStones.Charge);
-            LoadShiftStoneTexture(bundle, ShiftStones.Flow);
-            LoadShiftStoneTexture(bundle, ShiftStones.Guard);
-            LoadShiftStoneTexture(bundle, ShiftStones.Stubborn);
-            LoadShiftStoneTexture(bundle, ShiftStones.Surge);
-            LoadShiftStoneTexture(bundle, ShiftStones.Vigor);
-            LoadShiftStoneTexture(bundle, ShiftStones.Volatile);
-
-            GameObject.DontDestroyOnLoad(font);
-            GameObject.DontDestroyOnLoad(backgroundTexture);
-            GameObject.DontDestroyOnLoad(healthPipsTexture);
             GameObject.DontDestroyOnLoad(uiContainer);
             GameObject.DontDestroyOnLoad(canvas);
         }
@@ -152,9 +102,9 @@ namespace RumbleHud
             }
 
             // Load the resources if not loaded.
-            if (font == null)
+            if (!Resources.Initialized)
             {
-                LoadResources();
+                Initialize();
             }
 
             // Update all player info.
@@ -242,7 +192,7 @@ namespace RumbleHud
             backgroundObject.name = $"RumbleHud_{playerInfo.PlayFabId}_background";
 
             RawImage rawImage = backgroundObject.AddComponent<RawImage>();
-            rawImage.texture = backgroundTexture;
+            rawImage.texture = Resources.BackgroundTexture;
             rawImage.SetNativeSize();
 
             var rawImageTransform = rawImage.GetComponent<RectTransform>();
@@ -273,7 +223,7 @@ namespace RumbleHud
             nameObject.name = $"RumbleHud_{playerInfo.PlayFabId}_name";
             Text nameText = nameObject.AddComponent<Text>();
 
-            nameText.font = font;
+            nameText.font = Resources.Font;
             nameText.text = playerInfo.Name;
             // nameText.fontSize = 42;
             nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
@@ -311,7 +261,7 @@ namespace RumbleHud
             Text bpText = bpObject.AddComponent<Text>();
 
             bpText.color = new Color(251f / 255, 1, 143f / 255);
-            bpText.font = font;
+            bpText.font = Resources.Font;
             bpText.text = $"{playerInfo.BP} BP";
             bpText.fontSize = 28;
 
@@ -372,12 +322,12 @@ namespace RumbleHud
             healthPipsObject.name = $"RumbleHud_{playerInfo.PlayFabId}_healthPips";
             RawImage healthPips = healthPipsObject.AddComponent<RawImage>();
 
-            healthPips.texture = healthPipsTexture;
+            healthPips.texture = Resources.HealthPipsTexture;
 
             healthPips.uvRect = new Rect(0, 0, 20, 1);
 
             var healthPipsTransform = healthPips.GetComponent<RectTransform>();
-            healthPipsTransform.sizeDelta = new Vector2(healthPipsTexture.width * 20, healthPipsTexture.height);
+            healthPipsTransform.sizeDelta = new Vector2(Resources.HealthPipsTexture.width * 20, Resources.HealthPipsTexture.height);
 
             if (isRightAligned)
             {
@@ -404,7 +354,7 @@ namespace RumbleHud
             leftShiftStoneObject.name = $"RumbleHud_{playerInfo.PlayFabId}_leftShiftStone";
             RawImage leftShiftStone = leftShiftStoneObject.AddComponent<RawImage>();
 
-            leftShiftStone.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
+            leftShiftStone.texture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneLeft);
 
             var leftShiftStoneTransform = leftShiftStoneObject.GetComponent<RectTransform>();
 
@@ -435,7 +385,7 @@ namespace RumbleHud
             rightShiftStoneObject.name = $"RumbleHud_{playerInfo.PlayFabId}_rightShiftStone";
             RawImage rightShiftStone = rightShiftStoneObject.AddComponent<RawImage>();
 
-            rightShiftStone.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
+            rightShiftStone.texture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneRight);
 
             var rightShiftStoneTransform = rightShiftStoneObject.GetComponent<RectTransform>();
 
@@ -557,18 +507,15 @@ namespace RumbleHud
             var healthPipsTransform = playerUiElements.HealthPips.GetComponent<RectTransform>();
             playerUiElements.HealthPips.uvRect = new Rect(0, 0, playerInfo.HP, 1);
 
-            healthPipsTransform.sizeDelta = new Vector2(healthPipsTexture.width * playerInfo.HP, healthPipsTexture.height);
+            healthPipsTransform.sizeDelta = new Vector2(
+                Resources.HealthPipsTexture.width * playerInfo.HP,
+                Resources.HealthPipsTexture.height);
 
-            if (shiftStoneTextures[playerInfo.ShiftStoneLeft] == null)
-            {
-                LoadShiftStoneTexture(bundle, playerInfo.ShiftStoneLeft);
-            }
-            if (shiftStoneTextures[playerInfo.ShiftStoneRight] == null)
-            {
-                LoadShiftStoneTexture(bundle, playerInfo.ShiftStoneRight);
-            }
-            playerUiElements.ShiftStoneLeft.texture = shiftStoneTextures[playerInfo.ShiftStoneLeft];
-            playerUiElements.ShiftStoneRight.texture = shiftStoneTextures[playerInfo.ShiftStoneRight];
+            var leftShiftStoneTexture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneLeft);
+            var rightShiftStoneTexture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneRight);
+
+            playerUiElements.ShiftStoneLeft.texture = leftShiftStoneTexture;
+            playerUiElements.ShiftStoneRight.texture = rightShiftStoneTexture;
             
             if (playerUiElements.PortraitGenerated > 0)
             {
