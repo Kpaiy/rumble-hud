@@ -49,6 +49,8 @@ namespace RumbleHud
 
             GameObject.DontDestroyOnLoad(uiContainer);
             GameObject.DontDestroyOnLoad(canvas);
+
+            initialized = true;
         }
 
         public static void LoadPreviewCharacter()
