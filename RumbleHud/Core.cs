@@ -21,49 +21,6 @@ using UnityEngine.UI;
 
 namespace RumbleHud
 {
-    // First element is left hand, second element is right hand.
-    enum ShiftStones
-    {
-        Empty = -1,
-        Adamant = 0,
-        Charge = 1,
-        Flow = 2,
-        Guard = 3,
-        Stubborn = 4,
-        Surge = 5,
-        Vigor = 6,
-        Volatile = 7
-    }
-
-    class PlayerInfo
-    {
-        public string PlayFabId { get; set; }
-        public string Name { get; set; }
-        public int BP { get; set; }
-        public int HP { get; set; }
-        public ShiftStones ShiftStoneLeft { get; set; }
-        public ShiftStones ShiftStoneRight { get; set; }
-        public PlayerController PlayerController { get; set; }
-    }
-
-    class PlayerUiElements
-    {
-        public GameObject Container { get; set; }
-        public RawImage Background { get; set; }
-        public Text Name { get; set; }
-        public Text BP { get; set; }
-        public Image HealthBar { get; set; }
-        public RawImage HealthPips { get; set; }
-        public RawImage ShiftStoneLeft { get; set; }
-        public RawImage ShiftStoneRight { get; set; }
-        public Camera HeadshotCamera { get; set; }
-        public RenderTexture renderTexture { get; set; }
-        public RawImage Portrait { get; set; }
-        public int PortraitGenerated { get; set; }
-        public bool IsRightAligned { get; set; }
-        public string PlayFabId { get; set; }
-    }
-
     public class Core : MelonMod
     {
         private Il2CppAssetBundle bundle;
