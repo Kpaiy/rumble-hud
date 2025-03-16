@@ -10,6 +10,7 @@ using Il2CppTMPro;
 using MelonLoader;
 using System.ComponentModel;
 using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -211,6 +212,12 @@ namespace RumbleHud
 
                     string playfabId = current.Data.GeneralData.PlayFabMasterId;
 
+                    // Strip Unity format indicators from the username
+                    // TODO: Use TextMeshPro instead so they can be supported.
+                    string strippedUsername = Regex.Replace(
+                        current.Data.GeneralData.PublicUsername,
+                        @"<[^>]*>", "");
+
                     if (playerManager.AllPlayers.Count == 1)
                     {
                         selfPlayFabId = playfabId;
@@ -219,7 +226,7 @@ namespace RumbleHud
                     PlayerInfo currentPlayerInfo = new PlayerInfo
                     {
                         PlayFabId = playfabId,
-                        Name = current.Data.GeneralData.PublicUsername,
+                        Name = strippedUsername,
                         BP = current.Data.GeneralData.BattlePoints,
                         HP = current.Data.HealthPoints,
                         ShiftStoneLeft = (ShiftStones)current.Data.EquipedShiftStones[0],
@@ -311,13 +318,14 @@ namespace RumbleHud
 
             nameText.font = font;
             nameText.text = playerInfo.Name;
-            nameText.fontSize = 42;
+            // nameText.fontSize = 42;
             nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             var nameTextTransform = nameText.GetComponent<RectTransform>();
             nameTextTransform.sizeDelta = new Vector2(300, 50);
             nameText.resizeTextForBestFit = true;
             nameText.resizeTextMaxSize = 42;
+            nameText.resizeTextMinSize = 16;
             if (isRightAligned)
             {
                 // Anchor top right.
