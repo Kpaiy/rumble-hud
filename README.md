@@ -28,15 +28,21 @@ Once a release is available:
 
 - Incompatible with LIV camera
 - Portrait generation for the player only occurs when entering the gym
+  - To regenerate your portrait after changing your avatar, you must leave
+      and re-enter the gym (e.g. go to park and back)
+- In parks, if you're unlucky, other player portraits can be photobombed
+  - This is funny as hell, not fixing this
 
 ## Future Goals
 
-- Code cleanup; everything is in one C# file at the moment.
+- Implement support for Unity Rich Text (color tags in usernames)
+- Investigate LIV support
 - Integrate with RumbleModUI to expose configuration options:
   - Hide or show HUD
   - Re-generate player portraits
   - Rearrange ordering of players on the HUD.
-- Investigate LIV support
+- Consider support for NameBending
+  - I am not familiar with this mod whatsoever.
 - Score tracking
 
 ## Thanks
