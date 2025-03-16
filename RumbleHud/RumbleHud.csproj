@@ -460,6 +460,7 @@
 
 	<ItemGroup>
 		<Compile Include="Core.cs" />
+		<Compile Include="Hud.cs" />
 		<Compile Include="PlayerInfo.cs" />
 		<Compile Include="PlayerUiElements.cs" />
 		<Compile Include="Resources.cs" />

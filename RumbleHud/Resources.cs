@@ -35,6 +35,11 @@ namespace RumbleHud
         public static Texture2D BackgroundTexture { get {  return backgroundTexture; } }
         public static Texture2D HealthPipsTexture { get { return healthPipsTexture; } }
 
+        public static readonly Color HealthLow = new Color(151f / 255, 74f / 255, 69f / 255);
+        public static readonly Color HealthMedium = new Color(139f / 255, 132f / 255, 66f / 255);
+        public static readonly Color HealthHigh = new Color(96f / 255, 142f / 255, 83f / 255);
+        public static readonly Color HealthFull = new Color(124f / 255, 150f / 255, 171f / 255);
+
         private static void LoadShiftStoneTexture(ShiftStones shiftStone)
         {
             var resourceName = shiftStoneResourceNames[shiftStone];
