@@ -72,6 +72,15 @@ namespace RumbleHud
                 Hud.ToggleVisible();
             }
 
+            if (Input.GetKeyDown(KeyCode.Equals))
+            {
+                Hud.SetScale(Hud.Scale + 0.1f);
+            }
+            if (Input.GetKeyDown(KeyCode.Minus))
+            {
+                Hud.SetScale(Hud.Scale - 0.1f);
+            }
+
             // Update all player info.
             try
             {
@@ -130,6 +139,7 @@ namespace RumbleHud
                     if (!Hud.PlayerHudExists(playerInfo.PlayFabId))
                     {
                         Hud.CreatePlayerUi(playerInfo, Hud.PlayerUiElementsCount);
+
                         LoggerInstance.Msg($"RumbleHud: Created Element for player {playerInfo.Name}.");
                         continue;
                     }

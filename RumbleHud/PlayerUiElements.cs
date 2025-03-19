@@ -19,5 +19,6 @@ namespace RumbleHud
         public int PortraitGenerated { get; set; }
         public bool IsRightAligned { get; set; }
         public string PlayFabId { get; set; }
+        public int Position { get; set; }
     }
 }

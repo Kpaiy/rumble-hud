@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using UnityEngine;
 using Il2CppRUMBLE.Players;
+using UnityEngine.Rendering;
 
 namespace RumbleHud
 {
@@ -28,6 +29,9 @@ namespace RumbleHud
         private static GameObject previewHead = null;
 
         public static string SelfPlayFabId { get; set; }
+
+        private static float scale = 1f;
+        public static float Scale { get { return scale; } }
 
         public static void Initialize()
         {
@@ -60,6 +64,28 @@ namespace RumbleHud
             uiContainer.active = !uiContainer.active;
         }
 
+        public static void SetScale(float newScale)
+        {
+            scale = newScale;
+
+            foreach (var playerUiElements in uiElementsByPlayer.Values)
+            {
+                playerUiElements.Container.transform.localScale = new Vector3(scale, scale, scale);
+                int offset = (int)((playerUiElements.Position / 2) * 150 * -1 * scale);
+
+                var rawImageTransform = playerUiElements.Background.GetComponent<RectTransform>();
+                if (playerUiElements.IsRightAligned)
+                {
+                    // Anchor to top right.
+                    rawImageTransform.anchoredPosition = new Vector3(0, -50 + offset, 0);
+                }
+                else
+                {
+                    rawImageTransform.anchoredPosition = new Vector3(0, -50 + offset, 0);
+                }
+            }
+        }
+
         public static void LoadPreviewCharacter()
         {
             previewHead = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
@@ -79,7 +105,7 @@ namespace RumbleHud
         public static void CreatePlayerUi(PlayerInfo playerInfo, int position)
         {
             bool isRightAligned = position % 2 == 1;
-            int offset = (position / 2) * 150 * -1;
+            int offset = (int)((position / 2) * 150 * -1 * scale);
 
             // BACKGROUND
 
@@ -359,6 +385,8 @@ namespace RumbleHud
                 portraitImageTransform.anchoredPosition = new Vector2(0, 0);
             }
 
+            backgroundObject.transform.localScale = new Vector3(scale, scale, scale);
+
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
             {
                 Container = backgroundObject,
@@ -375,6 +403,7 @@ namespace RumbleHud
                 PortraitGenerated = -30,
                 IsRightAligned = isRightAligned,
                 PlayFabId = playerInfo.PlayFabId,
+                Position = position
             };
         }
 
