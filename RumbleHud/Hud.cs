@@ -53,6 +53,13 @@ namespace RumbleHud
             initialized = true;
         }
 
+        public static void ToggleVisible()
+        {
+            if (uiContainer == null) return;
+
+            uiContainer.active = !uiContainer.active;
+        }
+
         public static void LoadPreviewCharacter()
         {
             previewHead = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");

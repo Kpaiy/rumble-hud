@@ -67,6 +67,11 @@ namespace RumbleHud
                 Hud.Initialize();
             }
 
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                Hud.ToggleVisible();
+            }
+
             // Update all player info.
             try
             {
