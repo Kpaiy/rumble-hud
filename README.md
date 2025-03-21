@@ -36,6 +36,7 @@ Once a release is available:
 ## Future Goals
 
 - Implement support for Unity Rich Text (color tags in usernames)
+- Implement host/client indicator
 - Investigate LIV support
 - Integrate with RumbleModUI to expose configuration options:
   - Hide or show HUD
@@ -44,6 +45,9 @@ Once a release is available:
 - Consider support for NameBending
   - I am not familiar with this mod whatsoever.
 - Score tracking
+
+- Is it possible to use OSC or host a server? Something that could expose this information outside of RUMBLE, so someone familiar with OBS could make their own elements in OBS instead using this info?
+  - This could be a workaround for supporting LIV for serious streaming setups.
 
 ## Thanks
 
