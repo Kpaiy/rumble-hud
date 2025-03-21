@@ -30,8 +30,10 @@ Once a release is available:
 - Portrait generation for the player only occurs when entering the gym
   - To regenerate your portrait after changing your avatar, you must leave
       and re-enter the gym (e.g. go to park and back)
-- In parks, if you're unlucky, other player portraits can be photobombed
+- Opponents can have their portrait taken while they're in awfully unflattering poses, e.g. full scorpion.
   - This is funny as hell, not fixing this
+- In parks, if you're unlucky, other player portraits can be photobombed
+  - This is also funny as hell, not fixing this
 
 ## Future Goals
 
