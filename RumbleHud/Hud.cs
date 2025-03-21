@@ -343,7 +343,7 @@ namespace RumbleHud
             // PORTRAIT CAMERA
 
             GameObject portraitCameraObject = new GameObject();
-            portraitCameraObject.name = $"PlayerHud_{playerInfo.PlayFabId}_portraitCamera";
+            portraitCameraObject.name = $"RumbleHud_{playerInfo.PlayFabId}_portraitCamera";
 
             Camera portraitCamera = portraitCameraObject.AddComponent<Camera>();
             portraitCamera.targetTexture = renderTexture;
@@ -356,7 +356,7 @@ namespace RumbleHud
             // PORTRAIT RAW IMAGE
 
             GameObject portraitImageObject = new GameObject();
-            portraitImageObject.name = $"PlayerHud_{playerInfo.PlayFabId}_portrait";
+            portraitImageObject.name = $"RumbleHud_{playerInfo.PlayFabId}_portrait";
 
             RawImage portraitImage = portraitImageObject.AddComponent<RawImage>();
             portraitImage.transform.parent = backgroundObject.transform;
