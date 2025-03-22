@@ -31,8 +31,7 @@ This mod requires:
 
 ## Installation Instructions
 
-Once a release is available:
-1. Extract the release files into your RUMBLE install directory.
+1. Extract the `Mods` and `UserData` folders into your RUMBLE install directory.
 
 ## Known Issues
 
