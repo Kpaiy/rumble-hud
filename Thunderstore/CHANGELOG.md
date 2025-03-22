@@ -1,3 +1,7 @@
+# Version 1.0.1
+
+- Make BP text overflow instead of word wrap.
+
 # Version 1.0.0
 
 Initial release. Compared to testing version:
