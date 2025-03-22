@@ -10,6 +10,16 @@ The mod will, for each player, display their:
   - Equipped Shift Stones
   - Player Portrait
 
+## Controls
+
+The mod currently uses the following controls:
+  - `I` to toggle HUD on/off
+  - `-`/`=` (near the backspace key) to decrease/increase HUD scale
+
+The HUD scale currently saves to a settings file: `UserData/RumbleHud.xml`.
+**Note:** Settings save on game quit, so RUMBLE crashing might mean your 
+settings don't save.
+
 ## Demo Footage (Click to View)
 
 [![RUMBLE HUD Demo](https://img.youtube.com/vi/MW8i_r3l8gQ/0.jpg)](https://www.youtube.com/watch?v=MW8i_r3l8gQ)
