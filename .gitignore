@@ -398,3 +398,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Thunderstore Build Files
+Thunderstore/RumbleHud.zip
+Thunderstore/thunderstoreBuild
