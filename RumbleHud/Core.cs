@@ -27,9 +27,30 @@ namespace RumbleHud
 
         private List<PlayerInfo> playerInfos = null;
 
+        private string settingsFilePath = @"UserData\RumbleHud.json";
+
+
         public override void OnInitializeMelon()
         {
             LoggerInstance.Msg("RumbleHud: Initialized.");
+
+            try
+            {
+                Settings.FromXmlFile(settingsFilePath);
+                LoggerInstance.Msg("RumbleHud: Loaded settings from file.");
+            } catch
+            {
+                Settings.Initialize();
+                LoggerInstance.Msg("RumbleHud: Unable to load settings. Using defaults.");
+            }
+        }
+
+        public override void OnApplicationQuit()
+        {
+            // Save settings.
+            Settings.Instance.ToXmlFile(settingsFilePath);
+
+            base.OnApplicationQuit();
         }
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
@@ -74,11 +95,11 @@ namespace RumbleHud
 
             if (Input.GetKeyDown(KeyCode.Equals))
             {
-                Hud.SetScale(Hud.Scale + 0.1f);
+                Hud.SetScale(Settings.Instance.HudScale + 0.1f);
             }
             if (Input.GetKeyDown(KeyCode.Minus))
             {
-                Hud.SetScale(Hud.Scale - 0.1f);
+                Hud.SetScale(Settings.Instance.HudScale - 0.1f);
             }
 
             // Update all player info.

@@ -30,9 +30,6 @@ namespace RumbleHud
 
         public static string SelfPlayFabId { get; set; }
 
-        private static float scale = 1f;
-        public static float Scale { get { return scale; } }
-
         public static void Initialize()
         {
             if (initialized) return;
@@ -66,12 +63,12 @@ namespace RumbleHud
 
         public static void SetScale(float newScale)
         {
-            scale = newScale;
+            Settings.Instance.HudScale = newScale;
 
             foreach (var playerUiElements in uiElementsByPlayer.Values)
             {
-                playerUiElements.Container.transform.localScale = new Vector3(scale, scale, scale);
-                int offset = (int)((playerUiElements.Position / 2) * 150 * -1 * scale);
+                playerUiElements.Container.transform.localScale = new Vector3(newScale, newScale, newScale);
+                int offset = (int)((playerUiElements.Position / 2) * 150 * -1 * newScale);
 
                 var rawImageTransform = playerUiElements.Background.GetComponent<RectTransform>();
                 if (playerUiElements.IsRightAligned)
@@ -105,7 +102,7 @@ namespace RumbleHud
         public static void CreatePlayerUi(PlayerInfo playerInfo, int position)
         {
             bool isRightAligned = position % 2 == 1;
-            int offset = (int)((position / 2) * 150 * -1 * scale);
+            int offset = (int)((position / 2) * 150 * -1 * Settings.Instance.HudScale);
 
             // BACKGROUND
 
@@ -385,6 +382,7 @@ namespace RumbleHud
                 portraitImageTransform.anchoredPosition = new Vector2(0, 0);
             }
 
+            var scale = Settings.Instance.HudScale;
             backgroundObject.transform.localScale = new Vector3(scale, scale, scale);
 
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
