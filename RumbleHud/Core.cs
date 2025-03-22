@@ -27,7 +27,7 @@ namespace RumbleHud
 
         private List<PlayerInfo> playerInfos = null;
 
-        private string settingsFilePath = @"UserData\RumbleHud.json";
+        private string settingsFilePath = @"UserData\RumbleHud.xml";
 
 
         public override void OnInitializeMelon()
