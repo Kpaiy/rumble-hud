@@ -11,5 +11,6 @@ namespace RumbleHud
         public ShiftStones ShiftStoneLeft { get; set; }
         public ShiftStones ShiftStoneRight { get; set; }
         public PlayerController PlayerController { get; set; }
+        public bool IsHost { get; set; }
     }
 }

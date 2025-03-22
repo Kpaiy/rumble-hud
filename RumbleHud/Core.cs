@@ -134,6 +134,7 @@ namespace RumbleHud
                         ShiftStoneLeft = (ShiftStones)current.Data.EquipedShiftStones[0],
                         ShiftStoneRight = (ShiftStones)current.Data.EquipedShiftStones[1],
                         PlayerController = current.Controller,
+                        IsHost = Il2CppPhoton.Pun.PhotonNetwork.IsMasterClient
                     };
 
                     newPlayerInfos.Add(currentPlayerInfo);
