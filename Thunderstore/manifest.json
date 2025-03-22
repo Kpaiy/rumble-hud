@@ -1,5 +1,5 @@
 {
-  "name": "RumbleHud:",
+  "name": "RumbleHud",
   "description": "Adds a HUD to the RUMBLE desktop window for spectator experience.",
   "version_number": "1.0.0",
   "dependencies": [

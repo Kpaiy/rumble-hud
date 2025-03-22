@@ -1,8 +1,10 @@
-echo on
+echo off
 
 rem clear any previous build traces
 del RumbleHud.zip
 del thunderstoreBuild\*
+del thunderstoreBuild\Mods\*
+del thunderstoreBuild\UserData\*
 rmdir thunderstoreBuild\Mods
 rmdir thunderstoreBuild\UserData
 rmdir thunderstoreBuild
