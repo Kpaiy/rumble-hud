@@ -61,6 +61,15 @@ Once a release is available:
 - Is it possible to use OSC or host a server? Something that could expose this information outside of RUMBLE, so someone familiar with OBS could make their own elements in OBS instead using this info?
   - This could be a workaround for supporting LIV for serious streaming setups.
 
+## Support
+
+Reach out to me on Discord (kpaiy) if you have issues or feature requests.
+I can't guarantee fast response times, but I'll do what I can. ^-^
+
 ## Thanks
 
-- **SDRAWKCABMIAY**: Provided shift stone sprites
+- **SDRAWKCABMIAY** for providing shift stone graphics.
+- Testers:
+  - **Jman**
+  - **Rhymenocerous**
+  - **Savitarian**
