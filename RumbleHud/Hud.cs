@@ -183,6 +183,8 @@ namespace RumbleHud
             bpText.font = Resources.Font;
             bpText.text = $"{playerInfo.BP} BP";
             bpText.fontSize = 36;
+            bpText.horizontalOverflow = HorizontalWrapMode.Overflow;
+
 
             var bpTextTransform = bpText.GetComponent<RectTransform>();
 
