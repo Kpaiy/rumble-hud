@@ -145,7 +145,7 @@ namespace RumbleHud
             nameText.font = Resources.Font;
             nameText.text = playerInfo.Name;
             // nameText.fontSize = 42;
-            nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            // nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             var nameTextTransform = nameText.GetComponent<RectTransform>();
             nameTextTransform.sizeDelta = new Vector2(300, 50);
@@ -182,11 +182,14 @@ namespace RumbleHud
             bpText.color = new Color(251f / 255, 1, 143f / 255);
             bpText.font = Resources.Font;
             bpText.text = $"{playerInfo.BP} BP";
-            bpText.fontSize = 36;
-            bpText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            bpText.resizeTextForBestFit = true;
+            bpText.resizeTextMaxSize = 36;
+            bpText.resizeTextMinSize = 16;
+            // bpText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
 
             var bpTextTransform = bpText.GetComponent<RectTransform>();
+            bpTextTransform.sizeDelta = new Vector2(135, 50);
 
             if (isRightAligned)
             {
@@ -195,8 +198,9 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(0, 1);
                 bpTextTransform.pivot = new Vector2(0, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(10, -15);
-                bpText.alignment = TextAnchor.UpperRight;
+                bpTextTransform.anchoredPosition = new Vector3(15, -10);
+
+                bpText.alignment = TextAnchor.UpperLeft;
             }
             else
             {
@@ -205,7 +209,9 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(1, 1);
                 bpTextTransform.pivot = new Vector2(1, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(-10, -15);
+                bpTextTransform.anchoredPosition = new Vector3(-15, -10);
+
+                bpText.alignment = TextAnchor.UpperRight;
             }
 
             // HEALTH BAR
