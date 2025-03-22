@@ -56,6 +56,7 @@ This mod requires:
 - Consider support for NameBending
   - I am not familiar with this mod whatsoever.
 - Score tracking
+- Make shift stone icons pulse/shimmer when triggered/active
 - Is it possible to use OSC or host a server? Something that could expose this information outside of RUMBLE, so someone familiar with OBS could make their own elements in OBS instead using this info?
   - This could be a workaround for supporting LIV for serious streaming setups.
 
