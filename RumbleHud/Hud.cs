@@ -182,7 +182,7 @@ namespace RumbleHud
             bpText.color = new Color(251f / 255, 1, 143f / 255);
             bpText.font = Resources.Font;
             bpText.text = $"{playerInfo.BP} BP";
-            bpText.fontSize = 28;
+            bpText.fontSize = 36;
 
             var bpTextTransform = bpText.GetComponent<RectTransform>();
 
