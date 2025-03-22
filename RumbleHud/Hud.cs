@@ -189,7 +189,7 @@ namespace RumbleHud
 
 
             var bpTextTransform = bpText.GetComponent<RectTransform>();
-            bpTextTransform.sizeDelta = new Vector2(135, 50);
+            bpTextTransform.sizeDelta = new Vector2(125, 50);
 
             if (isRightAligned)
             {
@@ -198,7 +198,7 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(0, 1);
                 bpTextTransform.pivot = new Vector2(0, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(15, -10);
+                bpTextTransform.anchoredPosition = new Vector3(25, -15);
 
                 bpText.alignment = TextAnchor.UpperLeft;
             }
@@ -209,7 +209,7 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(1, 1);
                 bpTextTransform.pivot = new Vector2(1, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(-15, -10);
+                bpTextTransform.anchoredPosition = new Vector3(-25, -15);
 
                 bpText.alignment = TextAnchor.UpperRight;
             }
