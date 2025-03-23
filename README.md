@@ -46,7 +46,6 @@ This mod requires:
 
 ## Future Goals
 
-- Implement support for Unity Rich Text (color tags in usernames)
 - Implement host/client indicator
 - Investigate LIV support
 - Integrate with RumbleModUI to expose configuration options:
@@ -54,7 +53,6 @@ This mod requires:
   - Re-generate player portraits
   - Rearrange ordering of players on the HUD.
 - Consider support for NameBending
-  - I am not familiar with this mod whatsoever.
 - Score tracking
 - Make shift stone icons pulse/shimmer when triggered/active
 - Is it possible to use OSC or host a server? Something that could expose this information outside of RUMBLE, so someone familiar with OBS could make their own elements in OBS instead using this info?
