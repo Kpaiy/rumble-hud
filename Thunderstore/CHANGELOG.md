@@ -1,3 +1,7 @@
+# Version 1.0.2
+
+Make text shrink to fit (within reason) to accommodate long usernames.
+
 # Version 1.0.1
 
 - Make BP text overflow instead of word wrap.
