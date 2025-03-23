@@ -13,7 +13,6 @@ namespace RumbleHud
     {
         private static Il2CppAssetBundle bundle;
 
-        private static Font font;
         private static TMP_FontAsset tmpFont;
         private static Texture2D backgroundTexture = null;
         private static Texture2D healthPipsTexture = null;
@@ -34,7 +33,6 @@ namespace RumbleHud
         private static bool initialized = false;
         public static bool Initialized { get { return initialized; } }
 
-        public static Font Font {  get { return font; } }
         public static TMP_FontAsset TmpFont { get { return tmpFont; } }
         public static Texture2D BackgroundTexture { get {  return backgroundTexture; } }
         public static Texture2D HealthPipsTexture { get { return healthPipsTexture; } }
@@ -58,9 +56,6 @@ namespace RumbleHud
             if (initialized && !reload) return;
 
             bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
-            // GameObject myGameObject = GameObject.Instantiate(bundle.LoadAsset<GameObject>("Object name goes here!"));
-            font = GameObject.Instantiate(bundle.LoadAsset<Font>("GoodDogPlain"));
-            font.name = "RumbleHud_GoodDogPlain";
             tmpFont = GameObject.Instantiate(bundle.LoadAsset<TMP_FontAsset>("TMP_GoodDogPlain"));
             backgroundTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
             backgroundTexture.name = "RumbleHud_BackgroundTexture";
@@ -77,7 +72,6 @@ namespace RumbleHud
             LoadShiftStoneTexture(ShiftStones.Vigor);
             LoadShiftStoneTexture(ShiftStones.Volatile);
 
-            GameObject.DontDestroyOnLoad(font);
             GameObject.DontDestroyOnLoad(backgroundTexture);
             GameObject.DontDestroyOnLoad(healthPipsTexture);
 
