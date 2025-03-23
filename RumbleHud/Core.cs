@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.0.3", "Kpaiy", null)]
+[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.0.4", "Kpaiy", null)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 
 namespace RumbleHud

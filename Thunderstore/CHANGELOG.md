@@ -1,3 +1,12 @@
+# Version 1.0.4
+
+- Switch Text elements from `Text` type to `TextMeshProUGUI`.
+  - This means that your coloured usernames now show in the HUD!
+
+# Version 1.0.3
+
+- Forget to rebuild the mod so no actual progress. >.<
+
 # Version 1.0.2
 
 Make text shrink to fit (within reason) to accommodate long usernames.
