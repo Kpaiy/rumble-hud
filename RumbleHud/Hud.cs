@@ -145,8 +145,6 @@ namespace RumbleHud
 
             nameText.font = Resources.TmpFont;
             nameText.text = playerInfo.Name;
-            // nameText.fontSize = 42;
-            // nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             var nameTextTransform = nameText.GetComponent<RectTransform>();
             nameTextTransform.sizeDelta = new Vector2(300, 50);
@@ -180,16 +178,14 @@ namespace RumbleHud
             GameObject bpObject = new GameObject();
             bpObject.transform.parent = backgroundObject.transform;
             bpObject.name = $"RumbleHud_{playerInfo.PlayFabId}_bp";
-            Text bpText = bpObject.AddComponent<Text>();
+            TextMeshProUGUI bpText = bpObject.AddComponent<TextMeshProUGUI>();
 
             bpText.color = new Color(251f / 255, 1, 143f / 255);
-            bpText.font = Resources.Font;
+            bpText.font = Resources.TmpFont;
             bpText.text = $"{playerInfo.BP} BP";
-            bpText.resizeTextForBestFit = true;
-            bpText.resizeTextMaxSize = 36;
-            bpText.resizeTextMinSize = 16;
-            // bpText.horizontalOverflow = HorizontalWrapMode.Overflow;
-
+            bpText.enableAutoSizing = true;
+            bpText.fontSizeMax = 36;
+            bpText.fontSizeMin = 16;
 
             var bpTextTransform = bpText.GetComponent<RectTransform>();
             bpTextTransform.sizeDelta = new Vector2(125, 50);
@@ -203,7 +199,7 @@ namespace RumbleHud
 
                 bpTextTransform.anchoredPosition = new Vector3(25, -15);
 
-                bpText.alignment = TextAnchor.UpperLeft;
+                bpText.alignment = TextAlignmentOptions.TopLeft;
             }
             else
             {
@@ -214,7 +210,7 @@ namespace RumbleHud
 
                 bpTextTransform.anchoredPosition = new Vector3(-25, -15);
 
-                bpText.alignment = TextAnchor.UpperRight;
+                bpText.alignment = TextAlignmentOptions.TopRight;
             }
 
             // HEALTH BAR

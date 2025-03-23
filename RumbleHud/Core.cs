@@ -16,7 +16,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "0.1.0", "Kpaiy", null)]
+[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.0.3", "Kpaiy", null)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 
 namespace RumbleHud
@@ -114,12 +114,6 @@ namespace RumbleHud
 
                     string playfabId = current.Data.GeneralData.PlayFabMasterId;
 
-                    // Strip Unity format indicators from the username
-                    // TODO: Use TextMeshPro instead so they can be supported.
-                    string strippedUsername = Regex.Replace(
-                        current.Data.GeneralData.PublicUsername,
-                        @"<[^>]*>", "");
-
                     if (playerManager.AllPlayers.Count == 1)
                     {
                         Hud.SelfPlayFabId = playfabId;
@@ -128,7 +122,7 @@ namespace RumbleHud
                     PlayerInfo currentPlayerInfo = new PlayerInfo
                     {
                         PlayFabId = playfabId,
-                        Name = strippedUsername,
+                        Name = current.Data.GeneralData.PublicUsername,
                         BP = current.Data.GeneralData.BattlePoints,
                         HP = current.Data.HealthPoints,
                         ShiftStoneLeft = (ShiftStones)current.Data.EquipedShiftStones[0],

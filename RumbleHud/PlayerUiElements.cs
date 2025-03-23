@@ -9,7 +9,7 @@ namespace RumbleHud
         public GameObject Container { get; set; }
         public RawImage Background { get; set; }
         public TextMeshProUGUI Name { get; set; }
-        public Text BP { get; set; }
+        public TextMeshProUGUI BP { get; set; }
         public Image HealthBar { get; set; }
         public RawImage HealthPips { get; set; }
         public RawImage ShiftStoneLeft { get; set; }
