@@ -170,6 +170,7 @@ namespace RumbleHud
                 nameTextTransform.pivot = new Vector2(0, 1);
 
                 nameTextTransform.anchoredPosition = new Vector3(100, -10);
+                nameText.alignment = TextAnchor.UpperLeft;
             }
 
             // BP
@@ -198,7 +199,7 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(0, 1);
                 bpTextTransform.pivot = new Vector2(0, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(25, -15);
+                bpTextTransform.anchoredPosition = new Vector3(25, -10);
 
                 bpText.alignment = TextAnchor.UpperLeft;
             }
@@ -209,7 +210,7 @@ namespace RumbleHud
                 bpTextTransform.anchorMax = new Vector2(1, 1);
                 bpTextTransform.pivot = new Vector2(1, 1);
 
-                bpTextTransform.anchoredPosition = new Vector3(-25, -15);
+                bpTextTransform.anchoredPosition = new Vector3(-25, -10);
 
                 bpText.alignment = TextAnchor.UpperRight;
             }
