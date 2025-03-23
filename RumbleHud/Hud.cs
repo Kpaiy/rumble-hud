@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using Il2CppRUMBLE.Players;
 using UnityEngine.Rendering;
+using Il2CppTMPro;
 
 namespace RumbleHud
 {
@@ -140,18 +141,19 @@ namespace RumbleHud
             GameObject nameObject = new GameObject();
             nameObject.transform.parent = backgroundObject.transform;
             nameObject.name = $"RumbleHud_{playerInfo.PlayFabId}_name";
-            Text nameText = nameObject.AddComponent<Text>();
+            TextMeshProUGUI nameText = nameObject.AddComponent<TextMeshProUGUI>();
 
-            nameText.font = Resources.Font;
+            nameText.font = Resources.TmpFont;
             nameText.text = playerInfo.Name;
             // nameText.fontSize = 42;
             // nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             var nameTextTransform = nameText.GetComponent<RectTransform>();
             nameTextTransform.sizeDelta = new Vector2(300, 50);
-            nameText.resizeTextForBestFit = true;
-            nameText.resizeTextMaxSize = 42;
-            nameText.resizeTextMinSize = 16;
+            nameText.enableAutoSizing = true;
+            nameText.fontSizeMax = 42;
+            nameText.fontSizeMin = 16;
+
             if (isRightAligned)
             {
                 // Anchor top right.
@@ -160,7 +162,7 @@ namespace RumbleHud
                 nameTextTransform.pivot = new Vector2(1, 1);
 
                 nameTextTransform.anchoredPosition = new Vector3(-100, -10);
-                nameText.alignment = TextAnchor.UpperRight;
+                nameText.alignment = TextAlignmentOptions.TopRight;
             }
             else
             {
@@ -170,6 +172,7 @@ namespace RumbleHud
                 nameTextTransform.pivot = new Vector2(0, 1);
 
                 nameTextTransform.anchoredPosition = new Vector3(100, -10);
+                nameText.alignment = TextAlignmentOptions.TopLeft;
             }
 
             // BP

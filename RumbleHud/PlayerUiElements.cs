@@ -1,5 +1,6 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
+using Il2CppTMPro;
 
 namespace RumbleHud
 {
@@ -7,7 +8,7 @@ namespace RumbleHud
     {
         public GameObject Container { get; set; }
         public RawImage Background { get; set; }
-        public Text Name { get; set; }
+        public TextMeshProUGUI Name { get; set; }
         public Text BP { get; set; }
         public Image HealthBar { get; set; }
         public RawImage HealthPips { get; set; }
