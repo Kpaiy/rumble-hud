@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using Il2CppRUMBLE.Players;
 using UnityEngine.Rendering;
+using Il2CppTMPro;
 
 namespace RumbleHud
 {
@@ -140,18 +141,17 @@ namespace RumbleHud
             GameObject nameObject = new GameObject();
             nameObject.transform.parent = backgroundObject.transform;
             nameObject.name = $"RumbleHud_{playerInfo.PlayFabId}_name";
-            Text nameText = nameObject.AddComponent<Text>();
+            TextMeshProUGUI nameText = nameObject.AddComponent<TextMeshProUGUI>();
 
-            nameText.font = Resources.Font;
+            nameText.font = Resources.TmpFont;
             nameText.text = playerInfo.Name;
-            // nameText.fontSize = 42;
-            // nameText.horizontalOverflow = HorizontalWrapMode.Overflow;
 
             var nameTextTransform = nameText.GetComponent<RectTransform>();
             nameTextTransform.sizeDelta = new Vector2(300, 50);
-            nameText.resizeTextForBestFit = true;
-            nameText.resizeTextMaxSize = 42;
-            nameText.resizeTextMinSize = 16;
+            nameText.enableAutoSizing = true;
+            nameText.fontSizeMax = 42;
+            nameText.fontSizeMin = 16;
+
             if (isRightAligned)
             {
                 // Anchor top right.
@@ -160,7 +160,7 @@ namespace RumbleHud
                 nameTextTransform.pivot = new Vector2(1, 1);
 
                 nameTextTransform.anchoredPosition = new Vector3(-100, -10);
-                nameText.alignment = TextAnchor.UpperRight;
+                nameText.alignment = TextAlignmentOptions.TopRight;
             }
             else
             {
@@ -170,7 +170,7 @@ namespace RumbleHud
                 nameTextTransform.pivot = new Vector2(0, 1);
 
                 nameTextTransform.anchoredPosition = new Vector3(100, -10);
-                nameText.alignment = TextAnchor.UpperLeft;
+                nameText.alignment = TextAlignmentOptions.TopLeft;
             }
 
             // BP
@@ -178,16 +178,14 @@ namespace RumbleHud
             GameObject bpObject = new GameObject();
             bpObject.transform.parent = backgroundObject.transform;
             bpObject.name = $"RumbleHud_{playerInfo.PlayFabId}_bp";
-            Text bpText = bpObject.AddComponent<Text>();
+            TextMeshProUGUI bpText = bpObject.AddComponent<TextMeshProUGUI>();
 
             bpText.color = new Color(251f / 255, 1, 143f / 255);
-            bpText.font = Resources.Font;
+            bpText.font = Resources.TmpFont;
             bpText.text = $"{playerInfo.BP} BP";
-            bpText.resizeTextForBestFit = true;
-            bpText.resizeTextMaxSize = 36;
-            bpText.resizeTextMinSize = 16;
-            // bpText.horizontalOverflow = HorizontalWrapMode.Overflow;
-
+            bpText.enableAutoSizing = true;
+            bpText.fontSizeMax = 36;
+            bpText.fontSizeMin = 16;
 
             var bpTextTransform = bpText.GetComponent<RectTransform>();
             bpTextTransform.sizeDelta = new Vector2(125, 50);
@@ -201,7 +199,7 @@ namespace RumbleHud
 
                 bpTextTransform.anchoredPosition = new Vector3(25, -10);
 
-                bpText.alignment = TextAnchor.UpperLeft;
+                bpText.alignment = TextAlignmentOptions.TopLeft;
             }
             else
             {
@@ -212,7 +210,7 @@ namespace RumbleHud
 
                 bpTextTransform.anchoredPosition = new Vector3(-25, -10);
 
-                bpText.alignment = TextAnchor.UpperRight;
+                bpText.alignment = TextAlignmentOptions.TopRight;
             }
 
             // HEALTH BAR
