@@ -8,6 +8,7 @@ using UnityEngine;
 using Il2CppRUMBLE.Players;
 using UnityEngine.Rendering;
 using Il2CppTMPro;
+using MelonLoader;
 
 namespace RumbleHud
 {
@@ -339,6 +340,46 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchoredPosition = new Vector2(40 + 100, 10);
             }
 
+            // HOST ICON
+
+            MelonLogger.Msg("1");
+            GameObject hostIconObject = new GameObject();
+            MelonLogger.Msg("2");
+            hostIconObject.transform.parent = backgroundObject.transform;
+            MelonLogger.Msg("3");
+            hostIconObject.name = $"RumbleHud_{playerInfo.PlayFabId}_hostIcon";
+            MelonLogger.Msg("4");
+
+            RawImage hostIcon = hostIconObject.AddComponent<RawImage>();
+            MelonLogger.Msg("5");
+            hostIcon.texture = Resources.HostIconTexture;
+            MelonLogger.Msg("6");
+
+            var hostIconTransform = hostIconObject.GetComponent<RectTransform>();
+            MelonLogger.Msg("7");
+            hostIconTransform.sizeDelta = new Vector2(50, 50);
+            MelonLogger.Msg("8");
+
+            if (isRightAligned)
+            {
+                // Anchor top left, pivot top right to sit it just off the image.
+                hostIconTransform.anchorMin = new Vector2(0, 1);
+                hostIconTransform.anchorMax = new Vector2(0, 1);
+                hostIconTransform.pivot = new Vector2(1, 1);
+
+                hostIconTransform.anchoredPosition = new Vector2(0, -15);
+            }
+            else
+            {
+                // Anchor top right, pivot top left to sit it just off the image.
+                hostIconTransform.anchorMin = new Vector2(1, 1);
+                hostIconTransform.anchorMax = new Vector2(1, 1);
+                hostIconTransform.pivot = new Vector2(0, 1);
+
+                hostIconTransform.anchoredPosition = new Vector2(0, -15);
+            }
+            MelonLogger.Msg("42");
+
             // RENDER TEXTURE
 
             var renderTexture = new RenderTexture(100, 100, 16);
@@ -402,6 +443,7 @@ namespace RumbleHud
                 HealthPips = healthPips,
                 ShiftStoneLeft = leftShiftStone,
                 ShiftStoneRight = rightShiftStone,
+                HostIcon = hostIcon,
                 HeadshotCamera = portraitCamera,
                 renderTexture = renderTexture,
                 Portrait = portraitImage,
@@ -449,6 +491,8 @@ namespace RumbleHud
 
             playerUiElements.ShiftStoneLeft.texture = leftShiftStoneTexture;
             playerUiElements.ShiftStoneRight.texture = rightShiftStoneTexture;
+
+            playerUiElements.HostIcon.gameObject.active = playerInfo.IsHost;
 
             if (playerUiElements.PortraitGenerated > 0)
             {

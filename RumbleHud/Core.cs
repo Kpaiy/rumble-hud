@@ -1,4 +1,5 @@
 ﻿using Il2CppInterop.Common;
+using Il2CppPhoton.Pun;
 using Il2CppPhoton.Realtime;
 using Il2CppRUMBLE.Combat.ShiftStones;
 using Il2CppRUMBLE.Managers;
@@ -112,6 +113,14 @@ namespace RumbleHud
                 {
                     var current = playerEnumerator.Current;
 
+                    var photonView = current.Controller?.gameObject?.GetComponent<PhotonView>();
+
+                    bool isHost = false;
+                    if (photonView?.OwnerActorNr == 1)
+                    {
+                        isHost = true;
+                    }
+
                     string playfabId = current.Data.GeneralData.PlayFabMasterId;
 
                     if (playerManager.AllPlayers.Count == 1)
@@ -128,6 +137,7 @@ namespace RumbleHud
                         ShiftStoneLeft = (ShiftStones)current.Data.EquipedShiftStones[0],
                         ShiftStoneRight = (ShiftStones)current.Data.EquipedShiftStones[1],
                         PlayerController = current.Controller,
+                        IsHost = isHost,
                     };
 
                     newPlayerInfos.Add(currentPlayerInfo);

@@ -14,6 +14,7 @@ namespace RumbleHud
         public RawImage HealthPips { get; set; }
         public RawImage ShiftStoneLeft { get; set; }
         public RawImage ShiftStoneRight { get; set; }
+        public RawImage HostIcon {  get; set; }
         public Camera HeadshotCamera { get; set; }
         public RenderTexture renderTexture { get; set; }
         public RawImage Portrait { get; set; }

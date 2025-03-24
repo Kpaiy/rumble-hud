@@ -68,6 +68,7 @@ I can't guarantee fast response times, but I'll do what I can. ^-^
 ## Thanks
 
 - **SDRAWKCABMIAY** for providing shift stone graphics.
+- **Pep** for helping me with host in park lunacy. He is why I am sane enough to type this.
 - Testers:
   - **Jman**
   - **Rhymenocerous**

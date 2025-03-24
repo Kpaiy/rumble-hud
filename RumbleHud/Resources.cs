@@ -3,6 +3,7 @@ using Il2CppTMPro;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace RumbleHud
         private static TMP_FontAsset tmpFont;
         private static Texture2D backgroundTexture = null;
         private static Texture2D healthPipsTexture = null;
+        private static Texture2D hostIconTexture = null;
         private static Dictionary<ShiftStones, Texture2D> shiftStoneTextures = new Dictionary<ShiftStones, Texture2D>();
         private static Dictionary<ShiftStones, string> shiftStoneResourceNames = new Dictionary<ShiftStones, string>()
         {
@@ -36,6 +38,7 @@ namespace RumbleHud
         public static TMP_FontAsset TmpFont { get { return tmpFont; } }
         public static Texture2D BackgroundTexture { get {  return backgroundTexture; } }
         public static Texture2D HealthPipsTexture { get { return healthPipsTexture; } }
+        public static Texture2D HostIconTexture {  get { return hostIconTexture; } }
 
         public static readonly Color HealthLow = new Color(151f / 255, 74f / 255, 69f / 255);
         public static readonly Color HealthMedium = new Color(139f / 255, 132f / 255, 66f / 255);
@@ -61,6 +64,8 @@ namespace RumbleHud
             backgroundTexture.name = "RumbleHud_BackgroundTexture";
             healthPipsTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HealthPip"));
             healthPipsTexture.name = "RumbleHud_HealthPipTexture";
+            hostIconTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HostIcon"));
+            hostIconTexture.name = "RumbleHud_HostIconTexture";
 
             LoadShiftStoneTexture(ShiftStones.Empty);
             LoadShiftStoneTexture(ShiftStones.Adamant);
@@ -74,6 +79,7 @@ namespace RumbleHud
 
             GameObject.DontDestroyOnLoad(backgroundTexture);
             GameObject.DontDestroyOnLoad(healthPipsTexture);
+            GameObject.DontDestroyOnLoad(hostIconTexture);
 
             initialized = true;
         }
