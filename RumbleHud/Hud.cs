@@ -492,7 +492,7 @@ namespace RumbleHud
             playerUiElements.ShiftStoneLeft.texture = leftShiftStoneTexture;
             playerUiElements.ShiftStoneRight.texture = rightShiftStoneTexture;
 
-            playerUiElements.HostIcon.gameObject.active = playerInfo.IsHost;
+            playerUiElements.HostIcon.gameObject.active = Settings.Instance.ShowHostIndicator && playerInfo.IsHost;
 
             if (playerUiElements.PortraitGenerated > 0)
             {

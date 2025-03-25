@@ -94,6 +94,11 @@ namespace RumbleHud
                 Hud.ToggleVisible();
             }
 
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                Settings.Instance.ShowHostIndicator = !Settings.Instance.ShowHostIndicator;
+            }
+
             if (Input.GetKeyDown(KeyCode.Equals))
             {
                 Hud.SetScale(Settings.Instance.HudScale + 0.1f);

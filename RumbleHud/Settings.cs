@@ -13,6 +13,7 @@ namespace RumbleHud
     {
         public static Settings Instance { get; private set; }
         public float HudScale {  get; set; }
+        public bool ShowHostIndicator {  get; set; }
 
         public static Settings FromJson(string jsonString)
         {
@@ -24,6 +25,7 @@ namespace RumbleHud
             var newInstance = new Settings
             {
                 HudScale = 1.0f,
+                ShowHostIndicator = true,
             };
             Instance = newInstance;
             return newInstance;
