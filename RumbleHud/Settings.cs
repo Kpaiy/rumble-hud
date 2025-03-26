@@ -9,11 +9,19 @@ using UnityEngine;
 
 namespace RumbleHud
 {
+    public enum HostIndicatorOptions
+    {
+        None,
+        Text,
+        Icon,
+        Both
+    }
+
     public class Settings
     {
         public static Settings Instance { get; private set; }
         public float HudScale {  get; set; }
-        public bool ShowHostIndicator {  get; set; }
+        public HostIndicatorOptions HostIndicator {  get; set; }
 
         public static Settings FromJson(string jsonString)
         {
@@ -25,7 +33,7 @@ namespace RumbleHud
             var newInstance = new Settings
             {
                 HudScale = 1.0f,
-                ShowHostIndicator = true,
+                HostIndicator = HostIndicatorOptions.Text,
             };
             Instance = newInstance;
             return newInstance;

@@ -340,25 +340,62 @@ namespace RumbleHud
                 rightShiftStoneTransform.anchoredPosition = new Vector2(40 + 100, 10);
             }
 
+            // HOST TEXT
+
+            GameObject hostTextObject = new GameObject();
+            hostTextObject.transform.parent = backgroundObject.transform;
+            hostTextObject.name = $"RumbleHud_{playerInfo.PlayFabId}_hostText";
+
+            TextMeshProUGUI hostText = hostTextObject.AddComponent<TextMeshProUGUI>();
+
+            hostText.color = new Color(251f / 255, 1, 143f / 255);
+            hostText.font = Resources.TmpFont;
+            hostText.outlineColor = Color.black;
+            hostText.outlineWidth = 0.4f;
+            hostText.text = "Host";
+            hostText.enableAutoSizing = true;
+            hostText.fontSize = 36;
+
+            var hostTextTransform = hostText.GetComponent<RectTransform>();
+            hostTextTransform.sizeDelta = new Vector2(125, 50);
+
+            if (isRightAligned)
+            {
+                // Anchor to parent's top right, using bottom right of self.
+                hostTextTransform.anchorMin = new Vector2(1, 1);
+                hostTextTransform.anchorMax = new Vector2(1, 1);
+                hostTextTransform.pivot = new Vector2(1, 0);
+
+                hostTextTransform.anchoredPosition = new Vector3(-10, -10);
+
+                hostText.alignment = TextAlignmentOptions.BottomRight;
+            }
+            else
+            {
+                // Anchor to parent's top left, using bottom left of self.
+                hostTextTransform.anchorMin = new Vector2(0, 1);
+                hostTextTransform.anchorMax = new Vector2(0, 1);
+                hostTextTransform.pivot = new Vector2(0, 0);
+
+                hostTextTransform.anchoredPosition = new Vector3(10, -10);
+
+                hostText.alignment = TextAlignmentOptions.BottomLeft;
+            }
+
+            // Start inactive to avoid possible flickers.
+            hostTextObject.SetActive(false);
+
             // HOST ICON
 
-            MelonLogger.Msg("1");
             GameObject hostIconObject = new GameObject();
-            MelonLogger.Msg("2");
             hostIconObject.transform.parent = backgroundObject.transform;
-            MelonLogger.Msg("3");
             hostIconObject.name = $"RumbleHud_{playerInfo.PlayFabId}_hostIcon";
-            MelonLogger.Msg("4");
 
             RawImage hostIcon = hostIconObject.AddComponent<RawImage>();
-            MelonLogger.Msg("5");
             hostIcon.texture = Resources.HostIconTexture;
-            MelonLogger.Msg("6");
 
             var hostIconTransform = hostIconObject.GetComponent<RectTransform>();
-            MelonLogger.Msg("7");
             hostIconTransform.sizeDelta = new Vector2(50, 50);
-            MelonLogger.Msg("8");
 
             if (isRightAligned)
             {
@@ -378,7 +415,9 @@ namespace RumbleHud
 
                 hostIconTransform.anchoredPosition = new Vector2(0, -15);
             }
-            MelonLogger.Msg("42");
+
+            // Start inactive to avoid possible flickers.
+            hostIconObject.active = false;
 
             // RENDER TEXTURE
 
@@ -443,9 +482,10 @@ namespace RumbleHud
                 HealthPips = healthPips,
                 ShiftStoneLeft = leftShiftStone,
                 ShiftStoneRight = rightShiftStone,
+                HostText = hostText,
                 HostIcon = hostIcon,
                 HeadshotCamera = portraitCamera,
-                renderTexture = renderTexture,
+                RenderTexture = renderTexture,
                 Portrait = portraitImage,
                 PortraitGenerated = -30,
                 IsRightAligned = isRightAligned,
@@ -492,7 +532,12 @@ namespace RumbleHud
             playerUiElements.ShiftStoneLeft.texture = leftShiftStoneTexture;
             playerUiElements.ShiftStoneRight.texture = rightShiftStoneTexture;
 
-            playerUiElements.HostIcon.gameObject.active = Settings.Instance.ShowHostIndicator && playerInfo.IsHost;
+            playerUiElements.HostText.gameObject.active = playerInfo.IsHost && (
+                Settings.Instance.HostIndicator == HostIndicatorOptions.Text ||
+                Settings.Instance.HostIndicator == HostIndicatorOptions.Both);
+            playerUiElements.HostIcon.gameObject.active = playerInfo.IsHost && (
+                Settings.Instance.HostIndicator == HostIndicatorOptions.Icon ||
+                Settings.Instance.HostIndicator == HostIndicatorOptions.Both);
 
             if (playerUiElements.PortraitGenerated > 0)
             {

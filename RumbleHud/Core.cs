@@ -70,6 +70,32 @@ namespace RumbleHud
             Hud.LoadPreviewCharacter();
         }
 
+        private bool IsHost(int playerCount, string playFabId, PlayerController playerController)
+        {
+            // Don't bother showing host when there's only one player.
+            if (playerCount == 1) return false;
+
+            // Use the conventional check.
+            if (playerCount == 2)
+            {
+                bool selfIsHost = PhotonNetwork.IsMasterClient;
+                bool playerIsSelf = playFabId == Hud.SelfPlayFabId;
+
+                // Either we are checking if we are the host, or if
+                // the opponent is not us and we are not the host.
+                return (selfIsHost && playerIsSelf) || (!selfIsHost && playerIsSelf);
+            }
+
+            // We're in a park, check the PlayerController's PhotonView for an ID of 1 (creator).
+            // NOTE: This doesn't work for matches, because the ID is not reassigned on rematch.
+            var photonView = playerController?.gameObject?.GetComponent<PhotonView>();
+
+            // Safety.
+            if (photonView == null) return false;
+
+            return photonView.OwnerActorNr == 1;
+        }
+
         public override void OnUpdate()
         {
             // Get the player manager if it isn't present.
@@ -94,9 +120,25 @@ namespace RumbleHud
                 Hud.ToggleVisible();
             }
 
+            // Cycle host display mode.
             if (Input.GetKeyDown(KeyCode.O))
             {
-                Settings.Instance.ShowHostIndicator = !Settings.Instance.ShowHostIndicator;
+                // TODO: Surely there's a better way.
+                switch (Settings.Instance.HostIndicator)
+                {
+                    case HostIndicatorOptions.None:
+                        Settings.Instance.HostIndicator = HostIndicatorOptions.Text;
+                        break;
+                    case HostIndicatorOptions.Text:
+                        Settings.Instance.HostIndicator = HostIndicatorOptions.Icon;
+                        break;
+                    case HostIndicatorOptions.Icon:
+                        Settings.Instance.HostIndicator = HostIndicatorOptions.Both;
+                        break;
+                    case HostIndicatorOptions.Both:
+                        Settings.Instance.HostIndicator = HostIndicatorOptions.None;
+                        break;
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Equals))
@@ -120,22 +162,19 @@ namespace RumbleHud
 
                     var photonView = current.Controller?.gameObject?.GetComponent<PhotonView>();
 
-                    bool isHost = false;
-                    if (photonView?.OwnerActorNr == 1)
-                    {
-                        isHost = true;
-                    }
+                    string playFabId = current.Data.GeneralData.PlayFabMasterId;
 
-                    string playfabId = current.Data.GeneralData.PlayFabMasterId;
-
+                    // Record our own PlayFabId
                     if (playerManager.AllPlayers.Count == 1)
                     {
-                        Hud.SelfPlayFabId = playfabId;
+                        Hud.SelfPlayFabId = playFabId;
                     }
+
+                    bool isHost = IsHost(playerManager.AllPlayers.Count, playFabId, current.Controller);
 
                     PlayerInfo currentPlayerInfo = new PlayerInfo
                     {
-                        PlayFabId = playfabId,
+                        PlayFabId = playFabId,
                         Name = current.Data.GeneralData.PublicUsername,
                         BP = current.Data.GeneralData.BattlePoints,
                         HP = current.Data.HealthPoints,
