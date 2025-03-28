@@ -83,7 +83,7 @@ namespace RumbleHud
 
                 // Either we are checking if we are the host, or if
                 // the opponent is not us and we are not the host.
-                return (selfIsHost && playerIsSelf) || (!selfIsHost && playerIsSelf);
+                return (selfIsHost && playerIsSelf) || (!selfIsHost && !playerIsSelf);
             }
 
             // We're in a park, check the PlayerController's PhotonView for an ID of 1 (creator).
