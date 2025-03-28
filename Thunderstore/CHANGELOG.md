@@ -1,3 +1,13 @@
+# Version 1.1.0
+
+- Add host indicator to parks and matches.
+  - It is hidden when there is only one player in a scene.
+  - Press `O` on your keyboard to switch between the display modes for host indicator:
+    - None
+    - Text
+    - Icon
+    - Both
+
 # Version 1.0.4
 
 - Switch Text elements from `Text` type to `TextMeshProUGUI`.

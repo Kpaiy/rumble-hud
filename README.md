@@ -41,12 +41,12 @@ This mod requires:
 
 ## Known Issues
 
+- Metals in Challenger's Pauldron (at least) are currently transparent in player portrait.
 - Host icon is mediocre
   - If you have an icon you would like to have be the host icon, bundle it
       yourself according to the `AssetBundleSpecs.md` on the Github, or send it
       to me and I will bundle it for you when I have time.
 - Incompatible with LIV camera
-- Metals in Challenger's Pauldron (at least) are currently transparent in player portrait.
 - Portrait generation for the player only occurs when entering the gym
   - To regenerate your portrait after changing your avatar, you must leave
       and re-enter the gym (e.g. go to park and back)
@@ -59,7 +59,6 @@ This mod requires:
 
 - Extensive config with `rumblehud.xml`
   - Allow deeply customisable HUDs by having element positionings be config values.
-- Implement host/client indicator
 - Investigate LIV support
 - Integrate with RumbleModUI to expose configuration options:
   - Hide or show HUD
