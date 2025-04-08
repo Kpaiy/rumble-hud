@@ -1,3 +1,12 @@
+# Version 1.1.1
+
+- Fix a bug with host text outline specification
+  - As innocuous as this sounds, this was causing hella performance issues when
+    loading hud elements while the HUD is toggled off. It would error out and
+    retry while leaving vestiges of the first attempt, causing several
+    duplicates to **TANK** performance.
+- Increase logging (not too much, don't worry).
+
 # Version 1.1.0
 
 - Add host indicator to parks and matches.

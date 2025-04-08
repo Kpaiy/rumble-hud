@@ -57,6 +57,7 @@ This mod requires:
 
 ## Future Goals
 
+- Allow for portrait regeneration on key press.
 - Extensive config with `rumblehud.xml`
   - Allow deeply customisable HUDs by having element positionings be config values.
 - Investigate LIV support
