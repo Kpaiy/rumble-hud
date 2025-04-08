@@ -9,6 +9,7 @@ using Il2CppRUMBLE.Players;
 using UnityEngine.Rendering;
 using Il2CppTMPro;
 using MelonLoader;
+using Il2CppSystem.Net;
 
 namespace RumbleHud
 {
@@ -350,11 +351,10 @@ namespace RumbleHud
 
             hostText.color = new Color(251f / 255, 1, 143f / 255);
             hostText.font = Resources.TmpFont;
-            hostText.outlineColor = Color.black;
-            hostText.outlineWidth = 0.4f;
             hostText.text = "Host";
-            hostText.enableAutoSizing = true;
-            hostText.fontSize = 36;
+            hostText.SetOutlineColor(Color.black);
+            hostText.SetOutlineThickness(0.4f);
+            hostText.fontSize = 50;
 
             var hostTextTransform = hostText.GetComponent<RectTransform>();
             hostTextTransform.sizeDelta = new Vector2(125, 50);

@@ -160,8 +160,6 @@ namespace RumbleHud
                 {
                     var current = playerEnumerator.Current;
 
-                    var photonView = current.Controller?.gameObject?.GetComponent<PhotonView>();
-
                     string playFabId = current.Data.GeneralData.PlayFabMasterId;
 
                     // Record our own PlayFabId
@@ -190,6 +188,7 @@ namespace RumbleHud
                 playerInfos = newPlayerInfos;
             } catch (Exception ex)
             {
+                MelonLogger.Error(ex);
             }
 
             // Make new canvases if required, update if existing, for each player.
@@ -217,9 +216,13 @@ namespace RumbleHud
                     {
                         Hud.UpdatePlayerUi(playerInfo);
                     } catch (Exception ex)
-                    { }
+                    {
+                        LoggerInstance.Error(ex);
+                    }
                 }
-            } catch { }
+            } catch (Exception ex) {
+                LoggerInstance.Error(ex);
+            }
 
             // base.OnUpdate();
         }
