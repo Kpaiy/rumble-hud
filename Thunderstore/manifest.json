@@ -1,7 +1,7 @@
 {
   "name": "RumbleHud",
   "description": "Adds a HUD to the RUMBLE desktop window for spectator experience.",
-  "version_number": "1.1.1",
+  "version_number": "1.1.2",
   "dependencies": [
     "LavaGang-MelonLoader-0.7.0"
   ],

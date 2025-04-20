@@ -1,3 +1,12 @@
+# Version 1.1.2
+
+I honestly have so little idea why v1.1.1 was breaking for other players. I was
+unable to get v1.1.1 to break on my machine, so these are some just
+precautionary measures to hopefully help it function until I can give it a
+proper look this weekend.
+
+- Add more null checks and suppress some logs.
+
 # Version 1.1.1
 
 - Fix a bug with host text outline specification

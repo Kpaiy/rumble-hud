@@ -17,7 +17,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.1.1", "Kpaiy", null)]
+[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.1.2", "Kpaiy", null)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 
 namespace RumbleHud
@@ -102,6 +102,9 @@ namespace RumbleHud
             if (playerManager == null)
             {
                 playerManager = GameObject.Find("Game Instance/Initializable/PlayerManager")?.GetComponent<PlayerManager>();
+
+                // Try again next Update.
+                if (playerManager == null) return;
             }
 
             // Load the resources if not loaded.
@@ -155,7 +158,10 @@ namespace RumbleHud
             {
                 List<PlayerInfo> newPlayerInfos = new List<PlayerInfo>();
 
-                var playerEnumerator = playerManager.AllPlayers.GetEnumerator();
+                var playerEnumerator = playerManager?.AllPlayers?.GetEnumerator();
+                if (playerEnumerator == null) {
+                    return;
+                }
                 while (playerEnumerator.MoveNext())
                 {
                     var current = playerEnumerator.Current;
@@ -188,7 +194,7 @@ namespace RumbleHud
                 playerInfos = newPlayerInfos;
             } catch (Exception ex)
             {
-                MelonLogger.Error(ex);
+                // MelonLogger.Error(ex);
             }
 
             // Make new canvases if required, update if existing, for each player.
@@ -217,11 +223,11 @@ namespace RumbleHud
                         Hud.UpdatePlayerUi(playerInfo);
                     } catch (Exception ex)
                     {
-                        LoggerInstance.Error(ex);
+                        // LoggerInstance.Error(ex);
                     }
                 }
             } catch (Exception ex) {
-                LoggerInstance.Error(ex);
+                // LoggerInstance.Error(ex);
             }
 
             // base.OnUpdate();
