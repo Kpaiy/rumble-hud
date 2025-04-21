@@ -30,6 +30,8 @@ namespace RumbleHud
 
         private string settingsFilePath = @"UserData\RumbleHud.xml";
 
+        private string currentScene = "Loader";
+
 
         public override void OnInitializeMelon()
         {
@@ -56,6 +58,8 @@ namespace RumbleHud
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
+            currentScene = sceneName;
+
             if (sceneName != "Gym") return;
 
             // Clear all player panels, including the self player.
@@ -142,6 +146,12 @@ namespace RumbleHud
                         Settings.Instance.HostIndicator = HostIndicatorOptions.None;
                         break;
                 }
+            }
+
+            // Regenerate portraits.
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                Hud.RegeneratePortraits(currentScene == "Gym");
             }
 
             if (Input.GetKeyDown(KeyCode.Equals))

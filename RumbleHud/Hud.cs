@@ -33,6 +33,8 @@ namespace RumbleHud
 
         public static string SelfPlayFabId { get; set; }
 
+        private const int portraitGenerationTime = -30;
+
         public static void Initialize()
         {
             if (initialized) return;
@@ -487,7 +489,7 @@ namespace RumbleHud
                 HeadshotCamera = portraitCamera,
                 RenderTexture = renderTexture,
                 Portrait = portraitImage,
-                PortraitGenerated = -30,
+                PortraitGenerated = portraitGenerationTime,
                 IsRightAligned = isRightAligned,
                 PlayFabId = playerInfo.PlayFabId,
                 Position = position
@@ -621,6 +623,33 @@ namespace RumbleHud
             camera.transform.Rotate(0, 180, 0);
 
             camera.transform.RotateAround(head.transform.position, camera.transform.up, facingLeft ? -30 : 30);
+        }
+
+        public static void RegeneratePortraits(bool regenerateSelf)
+        {
+            // Regenerate self
+            if (regenerateSelf)
+            {
+                var selfUiElements = uiElementsByPlayer[SelfPlayFabId];
+                if (selfUiElements == null) return;
+
+                selfUiElements.PortraitGenerated = portraitGenerationTime;
+                selfUiElements.HeadshotCamera.gameObject.SetActive(true);
+                
+                return;
+            }
+
+            // Regenerate others
+            foreach (var playerUiElements in uiElementsByPlayer.Values)
+            {
+                if (playerUiElements.PlayFabId == SelfPlayFabId)
+                {
+                    continue;
+                }
+
+                playerUiElements.PortraitGenerated = portraitGenerationTime;
+                playerUiElements.HeadshotCamera.gameObject.SetActive(true);
+            }
         }
 
         public static void ClearPlayerUi(bool includeSelfPlayer = false)
