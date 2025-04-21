@@ -1,3 +1,8 @@
+# Version 1.2.0
+
+- Implement press `P` to regenerate portraits.
+  - It will only regenerate your own portrait if you are in the gym.
+
 # Version 1.1.2
 
 I honestly have so little idea why v1.1.1 was breaking for other players. I was

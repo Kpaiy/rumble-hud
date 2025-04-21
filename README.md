@@ -20,6 +20,8 @@ The mod currently uses the following controls:
     - Text only
     - Icon only
     - Both text and Icon
+  - `P` to regenerate player portraits
+    - Your own portrait can only be regenerated while in the gym
   - `-`/`=` (near the backspace key) to decrease/increase HUD scale
 
 The HUD scale currently saves to a settings file: `UserData/RumbleHud.xml`.
@@ -42,14 +44,9 @@ This mod requires:
 ## Known Issues
 
 - Metals in Challenger's Pauldron (at least) are currently transparent in player portrait.
-- Host icon is mediocre
-  - If you have an icon you would like to have be the host icon, bundle it
-      yourself according to the `AssetBundleSpecs.md` on the Github, or send it
-      to me and I will bundle it for you when I have time.
 - Incompatible with LIV camera
 - Portrait generation for the player only occurs when entering the gym
-  - To regenerate your portrait after changing your avatar, you must leave
-      and re-enter the gym (e.g. go to park and back)
+  - To update your own portrait, press `P` while you are in the gym
 - Opponents can have their portrait taken while they're in awfully unflattering poses, e.g. full scorpion.
   - This is funny as hell, not fixing this
 - In parks, if you're unlucky, other player portraits can be photobombed
