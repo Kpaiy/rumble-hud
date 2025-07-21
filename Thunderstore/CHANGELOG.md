@@ -1,3 +1,8 @@
+# Version 1.3.0
+
+- Implement `HideSolo` settings option.
+  - You have to update the settings file manually for this one. I didn't want to take up even more keys on the keyboard.
+
 # Version 1.2.0
 
 - Implement press `P` to regenerate portraits.

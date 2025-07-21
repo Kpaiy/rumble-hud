@@ -66,6 +66,13 @@ namespace RumbleHud
             uiContainer.active = !uiContainer.active;
         }
 
+        public static void SetVisible(bool visible)
+        {
+            if (uiContainer == null) return;
+
+            uiContainer.active = visible;
+        }
+
         public static void SetScale(float newScale)
         {
             Settings.Instance.HudScale = newScale;

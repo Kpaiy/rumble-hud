@@ -28,6 +28,14 @@ The HUD scale currently saves to a settings file: `UserData/RumbleHud.xml`.
 **Note:** Settings save on game quit, so RUMBLE crashing might mean your 
 settings don't save.
 
+## Settings File
+
+| Setting Key | Type | Default Value | Description |
+|-------------|------|---------------|-------------|
+| `HudScale` | float | 1.0 | The size of the HUD. Keep it strictly positive. Control in-game using `-` and `=`. |
+| `HostIndicator` | `None`, `Text`, `Icon`, or `Both` | `Text` | How to indicate who is host on the HUD. Cycle in-game using `O`. |
+| `HideSolo` | boolean (`true` or `false`) | `false` | Whether to auto-hide the HUD when you are the only player. Cannot be set in-game. |
+
 ## Demo Footage (Click to View)
 
 [![RUMBLE HUD Demo](https://img.youtube.com/vi/MW8i_r3l8gQ/0.jpg)](https://www.youtube.com/watch?v=MW8i_r3l8gQ)

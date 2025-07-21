@@ -17,7 +17,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.2.0", "Kpaiy", null)]
+[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.3.0", "Kpaiy", null)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 
 namespace RumbleHud
@@ -216,6 +216,11 @@ namespace RumbleHud
                 if (playerInfos.Count != Hud.PlayerUiElementsCount)
                 {
                     Hud.ClearPlayerUi();
+
+                    if (Settings.Instance.HideSolo)
+                    {
+                        Hud.SetVisible(playerInfos.Count != 1);
+                    }
                 }
 
                 foreach (var playerInfo in playerInfos)

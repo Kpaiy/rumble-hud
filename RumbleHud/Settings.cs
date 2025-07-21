@@ -20,8 +20,10 @@ namespace RumbleHud
     public class Settings
     {
         public static Settings Instance { get; private set; }
+
         public float HudScale {  get; set; }
         public HostIndicatorOptions HostIndicator {  get; set; }
+        public bool HideSolo { get; set; }
 
         public static Settings FromJson(string jsonString)
         {
@@ -34,6 +36,7 @@ namespace RumbleHud
             {
                 HudScale = 1.0f,
                 HostIndicator = HostIndicatorOptions.Text,
+                HideSolo = false,
             };
             Instance = newInstance;
             return newInstance;
