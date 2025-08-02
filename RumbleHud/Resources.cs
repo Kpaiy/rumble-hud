@@ -1,4 +1,6 @@
-﻿using Il2CppSystem.Threading.Tasks;
+﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppPlayFab.ProgressionModels;
+using Il2CppSystem.Threading.Tasks;
 using Il2CppTMPro;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,7 @@ namespace RumbleHud
 {
     class Resources
     {
-        private static Il2CppAssetBundle bundle;
+        private static AssetBundle bundle;
 
         private static TMP_FontAsset tmpFont;
         private static Texture2D backgroundTexture = null;
@@ -58,7 +60,8 @@ namespace RumbleHud
         {
             if (initialized && !reload) return;
 
-            bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
+            //bundle = Il2CppAssetBundleManager.LoadFromFile(@"UserData/rumblehud");
+            bundle = LoadBundleFromFile(@"UserData/rumblehud");
             tmpFont = GameObject.Instantiate(bundle.LoadAsset<TMP_FontAsset>("TMP_GoodDogPlain"));
             backgroundTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("PlayerBackground"));
             backgroundTexture.name = "RumbleHud_BackgroundTexture";
@@ -92,6 +95,42 @@ namespace RumbleHud
             }
 
             return shiftStoneTextures[shiftStone];
+        }
+
+        private static AssetBundle LoadBundleFromFile(string path)
+        {
+            System.IO.Stream stream = StreamFromFile(path);
+            Il2CppSystem.IO.Stream il2CppStream = ConvertToIl2CppStream(stream);
+            AssetBundle bundle = AssetBundle.LoadFromStream(il2CppStream);
+
+            stream.Close();
+            il2CppStream.Close();
+            
+            return bundle;
+        }
+
+        private static Il2CppSystem.IO.Stream ConvertToIl2CppStream(System.IO.Stream stream)
+        {
+            Il2CppSystem.IO.MemoryStream Il2CppStream = new Il2CppSystem.IO.MemoryStream();
+
+            const int bufferSize = 4096;
+            byte[] managedBuffer = new byte[bufferSize];
+            Il2CppStructArray<byte> Il2CppBuffer = new(managedBuffer);
+
+            int bytesRead;
+            while ((bytesRead = stream.Read(managedBuffer, 0, managedBuffer.Length)) > 0)
+            {
+                Il2CppBuffer = managedBuffer;
+                Il2CppStream.Write(Il2CppBuffer, 0, bytesRead);
+            }
+            Il2CppStream.Flush();
+            return Il2CppStream;
+        }
+
+        private static System.IO.MemoryStream StreamFromFile(string path)
+        {
+            byte[] fileBytes = File.ReadAllBytes(path);
+            return new MemoryStream(fileBytes);
         }
     }
 }
