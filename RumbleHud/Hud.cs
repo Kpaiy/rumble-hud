@@ -63,14 +63,14 @@ namespace RumbleHud
         {
             if (uiContainer == null) return;
 
-            uiContainer.active = !uiContainer.active;
+            uiContainer.SetActive(!uiContainer.activeSelf);
         }
 
         public static void SetVisible(bool visible)
         {
             if (uiContainer == null) return;
 
-            uiContainer.active = visible;
+            uiContainer.SetActive(visible);
         }
 
         public static void SetScale(float newScale)
