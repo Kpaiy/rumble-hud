@@ -97,8 +97,8 @@ namespace RumbleHud
 
         public static void LoadPreviewCharacter()
         {
-            previewHead = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
-            previewRenderer = GameObject.Find("--------------SCENE--------------/Gym_Production/Dressing Room/Preview Player Controller/Visuals/Renderer");
+            previewHead = GameObject.Find("--------------LOGIC--------------/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
+            previewRenderer = GameObject.Find("--------------LOGIC--------------/Dressing Room/Preview Player Controller/Visuals/Renderer");
 
             if (previewRenderer != null && previewRenderer.layer != playerControllerLayerMask)
             {
@@ -576,7 +576,7 @@ namespace RumbleHud
             if (!controllerObject.active) return null;
             // If the renderer aren't visible, also cancel.
             var skinnedMeshRenderer = controllerObject?.transform
-                ?.GetChild(0)
+                ?.GetChild(1) // Child 0 Might be LCKViewport instead of Visuals, confirm this.
                 ?.GetChild(0)
                 ?.GetComponent<SkinnedMeshRenderer>();
             if (skinnedMeshRenderer == null) return null;
@@ -588,7 +588,8 @@ namespace RumbleHud
             // From the controller object, get the nose bone.
             // Controller > Visuals > Skelington > Pelvis > Spine > Chest > Neck > Head > Nose
             var noseTransform = controllerObject?.transform
-                ?.GetChild(0) // Visuals
+                // TODO: Confirm GetChild(1) for Visuals.
+                ?.GetChild(1) // Visuals
                 ?.GetChild(1) // Skelington
                 ?.GetChild(0) // Pelvis
                 ?.GetChild(4) // Spine
@@ -613,7 +614,7 @@ namespace RumbleHud
 
             if (!controllerObject.active) return null;
 
-            return controllerObject?.transform?.GetChild(0).gameObject;
+            return controllerObject?.transform?.GetChild(1).gameObject; // Child 0 might be LCKViewport. Confirm this.
         }
 
         private static void PointCamera(Camera camera, GameObject head, GameObject visuals, bool facingLeft)
