@@ -1,3 +1,7 @@
+# Version 1.4.0
+
+- Update mod to support RUMBLE 0.4.2.1.
+
 # Version 1.3.0
 
 - Implement `HideSolo` settings option.

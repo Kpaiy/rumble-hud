@@ -362,7 +362,7 @@ namespace RumbleHud
             hostText.font = Resources.TmpFont;
             hostText.text = "Host";
             hostText.SetOutlineColor(Color.black);
-            hostText.SetOutlineThickness(0.4f);
+            hostText.SetOutlineThickness(0.2f);
             hostText.fontSize = 50;
 
             var hostTextTransform = hostText.GetComponent<RectTransform>();
