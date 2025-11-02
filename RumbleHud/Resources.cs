@@ -20,6 +20,8 @@ namespace RumbleHud
         private static Texture2D backgroundTexture = null;
         private static Texture2D healthPipsTexture = null;
         private static Texture2D hostIconTexture = null;
+        private static Texture2D roundWonTexture = null;
+        private static Texture2D roundEmptyTexture = null;
         private static Dictionary<ShiftStones, Texture2D> shiftStoneTextures = new Dictionary<ShiftStones, Texture2D>();
         private static Dictionary<ShiftStones, string> shiftStoneResourceNames = new Dictionary<ShiftStones, string>()
         {
@@ -69,6 +71,10 @@ namespace RumbleHud
             healthPipsTexture.name = "RumbleHud_HealthPipTexture";
             hostIconTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("HostIcon"));
             hostIconTexture.name = "RumbleHud_HostIconTexture";
+            roundWonTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("RoundWon"));
+            roundWonTexture.name = "RumbleHud_RoundWonTexture";
+            roundEmptyTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("RoundEmpty"));
+            roundEmptyTexture.name = "RumbleHud_RoundEmptyTexture";
 
             LoadShiftStoneTexture(ShiftStones.Empty);
             LoadShiftStoneTexture(ShiftStones.Adamant);
@@ -83,6 +89,8 @@ namespace RumbleHud
             GameObject.DontDestroyOnLoad(backgroundTexture);
             GameObject.DontDestroyOnLoad(healthPipsTexture);
             GameObject.DontDestroyOnLoad(hostIconTexture);
+            GameObject.DontDestroyOnLoad(roundWonTexture);
+            GameObject.DontDestroyOnLoad(roundEmptyTexture);
 
             initialized = true;
         }
