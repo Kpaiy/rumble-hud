@@ -1,3 +1,7 @@
+# Version 1.5.0
+
+- Add round tracking during matches.
+
 # Version 1.4.0
 
 - Update mod to support RUMBLE 0.4.2.1.
