@@ -1,4 +1,5 @@
 ﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppPlayFab.EconomyModels;
 using Il2CppPlayFab.ProgressionModels;
 using Il2CppSystem.Threading.Tasks;
 using Il2CppTMPro;
@@ -43,6 +44,8 @@ namespace RumbleHud
         public static Texture2D BackgroundTexture { get {  return backgroundTexture; } }
         public static Texture2D HealthPipsTexture { get { return healthPipsTexture; } }
         public static Texture2D HostIconTexture {  get { return hostIconTexture; } }
+        public static Texture2D RoundWonTexture { get { return roundWonTexture; } }
+        public static Texture2D RoundEmptyTexture { get { return roundEmptyTexture; } }
 
         public static readonly Color HealthLow = new Color(151f / 255, 74f / 255, 69f / 255);
         public static readonly Color HealthMedium = new Color(139f / 255, 132f / 255, 66f / 255);
@@ -103,6 +106,34 @@ namespace RumbleHud
             }
 
             return shiftStoneTextures[shiftStone];
+        }
+
+        public static Texture2D GetRoundTexture(bool won)
+        {
+            if (won)
+            {
+                if (roundWonTexture == null)
+                {
+                    roundWonTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("RoundWon"));
+                    roundWonTexture.name = "RumbleHud_RoundWonTexture";
+                    GameObject.DontDestroyOnLoad(roundWonTexture);
+
+                }
+
+                return roundWonTexture;
+            }
+            else
+            {
+                if (roundEmptyTexture == null)
+                {
+                    roundEmptyTexture = GameObject.Instantiate(bundle.LoadAsset<Texture2D>("RoundEmpty"));
+                    roundEmptyTexture.name = "RumbleHud_RoundEmptyTexture";
+                    GameObject.DontDestroyOnLoad(roundWonTexture);
+
+                }
+
+                return roundEmptyTexture;
+            }
         }
 
         private static AssetBundle LoadBundleFromFile(string path)

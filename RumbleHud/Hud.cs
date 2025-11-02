@@ -10,6 +10,7 @@ using UnityEngine.Rendering;
 using Il2CppTMPro;
 using MelonLoader;
 using Il2CppSystem.Net;
+using UnityEngine.Bindings;
 
 namespace RumbleHud
 {
@@ -428,6 +429,67 @@ namespace RumbleHud
             // Start inactive to avoid possible flickers.
             hostIconObject.active = false;
 
+            // ROUND PIPS
+
+            GameObject firstRoundObject = new GameObject();
+            firstRoundObject.transform.parent = backgroundObject.transform;
+            firstRoundObject.name = $"RumbleHud_{playerInfo.PlayFabId}_firstRound";
+
+            RawImage firstRound = firstRoundObject.AddComponent<RawImage>();
+            firstRound.texture = Resources.RoundEmptyTexture;
+
+            var firstRoundTransform = firstRoundObject.GetComponent<RectTransform>();
+            firstRoundTransform.sizeDelta = new Vector2(40, 40);
+
+            if (isRightAligned)
+            {
+                // Anchor bottom right, pivot top right, to sit it just below the main HUD.
+                firstRoundTransform.anchorMin = new Vector2(1, 0);
+                firstRoundTransform.anchorMax = new Vector2(1, 0);
+                firstRoundTransform.pivot = new Vector2(1, 1);
+
+                firstRoundTransform.anchoredPosition = new Vector2(-100, -3);
+            }
+            else
+            {
+                // Anchor bottom left, pivot top left, to sit it just below the main HUD.
+                firstRoundTransform.anchorMin = new Vector2(0, 0);
+                firstRoundTransform.anchorMax = new Vector2(0, 0);
+                firstRoundTransform.pivot = new Vector2(0, 1);
+
+                firstRoundTransform.anchoredPosition= new Vector2(100, -3);
+            }
+
+            // Second pip.
+            GameObject secondRoundObject = new GameObject();
+            secondRoundObject.transform.parent = backgroundObject.transform;
+            secondRoundObject.name = $"RumbleHud_{playerInfo.PlayFabId}_secondRound";
+
+            RawImage secondRound = secondRoundObject.AddComponent<RawImage>();
+            secondRound.texture = Resources.RoundEmptyTexture;
+
+            var secondRoundTransform = secondRoundObject.GetComponent<RectTransform>();
+            secondRoundTransform.sizeDelta = new Vector2(40, 40);
+
+            if (isRightAligned)
+            {
+                // Anchor bottom right, pivot top right, to sit it just below the main HUD.
+                secondRoundTransform.anchorMin = new Vector2(1, 0);
+                secondRoundTransform.anchorMax = new Vector2(1, 0);
+                secondRoundTransform.pivot = new Vector2(1, 1);
+
+                secondRoundTransform.anchoredPosition = new Vector2(-150, -3);
+            }
+            else
+            {
+                // Anchor bottom left, pivot top left, to sit it just below the main HUD.
+                secondRoundTransform.anchorMin = new Vector2(0, 0);
+                secondRoundTransform.anchorMax = new Vector2(0, 0);
+                secondRoundTransform.pivot = new Vector2(0, 1);
+
+                secondRoundTransform.anchoredPosition = new Vector2(150, -3);
+            }
+
             // RENDER TEXTURE
 
             var renderTexture = new RenderTexture(100, 100, 16);
@@ -499,7 +561,11 @@ namespace RumbleHud
                 PortraitGenerated = portraitGenerationTime,
                 IsRightAligned = isRightAligned,
                 PlayFabId = playerInfo.PlayFabId,
-                Position = position
+                Position = position,
+                FirstRound = firstRound,
+                SecondRound = secondRound,
+                // TODO: Zero this.
+                RoundsWon = 1,
             };
         }
 
@@ -534,6 +600,11 @@ namespace RumbleHud
             healthPipsTransform.sizeDelta = new Vector2(
                 Resources.HealthPipsTexture.width * playerInfo.HP,
                 Resources.HealthPipsTexture.height);
+
+            // Round pips.
+            int roundsWon = playerUiElements.RoundsWon;
+            playerUiElements.FirstRound.texture = Resources.GetRoundTexture(roundsWon >= 1);
+            playerUiElements.SecondRound.texture = Resources.GetRoundTexture(roundsWon >= 2);
 
             var leftShiftStoneTexture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneLeft);
             var rightShiftStoneTexture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneRight);
