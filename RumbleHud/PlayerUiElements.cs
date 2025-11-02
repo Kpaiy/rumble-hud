@@ -23,6 +23,8 @@ namespace RumbleHud
         public bool IsRightAligned { get; set; }
         public string PlayFabId { get; set; }
         public int Position { get; set; }
+        public GameObject FirstRoundObject { get; set; }
+        public GameObject SecondRoundObject { get; set; }
         public RawImage FirstRound { get; set; }
         public RawImage SecondRound { get; set; }
         public int RoundsWon { get; set; }

@@ -11,6 +11,8 @@ using Il2CppTMPro;
 using MelonLoader;
 using Il2CppSystem.Net;
 using UnityEngine.Bindings;
+using Il2CppPlayFab.ProgressionModels;
+using Il2CppMono.Security.Authenticode;
 
 namespace RumbleHud
 {
@@ -33,6 +35,8 @@ namespace RumbleHud
         private static GameObject previewHead = null;
 
         public static string SelfPlayFabId { get; set; }
+
+        private static bool roundsVisible = false;
 
         private const int portraitGenerationTime = -30;
 
@@ -74,6 +78,13 @@ namespace RumbleHud
             uiContainer.SetActive(visible);
         }
 
+        public static void SetRoundsVisible(bool visible)
+        {
+            roundsVisible = visible;
+
+
+        }
+
         public static void SetScale(float newScale)
         {
             Settings.Instance.HudScale = newScale;
@@ -110,6 +121,39 @@ namespace RumbleHud
         public static bool PlayerHudExists(string playFabId)
         {
             return uiElementsByPlayer.ContainsKey(playFabId);
+        }
+
+        public static void IncrementRound(string playFabId)
+        {
+            if (!PlayerHudExists(playFabId)) return;
+
+            var playerUiElements = uiElementsByPlayer[playFabId];
+            playerUiElements.RoundsWon++;
+        }
+
+        public static void ResetRoundTracking()
+        {
+            foreach (var uiElement in uiElementsByPlayer)
+            {
+                uiElement.Value.RoundsWon = 0;
+            }
+        }
+
+        public static void ResetRoundsIfWinnerPresent()
+        {
+            bool winnerExists = false;
+            foreach (var uiElement in uiElementsByPlayer)
+            {
+                if (uiElement.Value.RoundsWon == 2)
+                {
+                    winnerExists = true;
+                }
+            }
+
+            if (winnerExists)
+            {
+                ResetRoundTracking();
+            }
         }
 
         public static void CreatePlayerUi(PlayerInfo playerInfo, int position)
@@ -562,10 +606,11 @@ namespace RumbleHud
                 IsRightAligned = isRightAligned,
                 PlayFabId = playerInfo.PlayFabId,
                 Position = position,
+                FirstRoundObject = firstRoundObject,
+                SecondRoundObject = secondRoundObject,
                 FirstRound = firstRound,
                 SecondRound = secondRound,
-                // TODO: Zero this.
-                RoundsWon = 1,
+                RoundsWon = 0,
             };
         }
 
@@ -602,9 +647,14 @@ namespace RumbleHud
                 Resources.HealthPipsTexture.height);
 
             // Round pips.
-            int roundsWon = playerUiElements.RoundsWon;
-            playerUiElements.FirstRound.texture = Resources.GetRoundTexture(roundsWon >= 1);
-            playerUiElements.SecondRound.texture = Resources.GetRoundTexture(roundsWon >= 2);
+            playerUiElements.FirstRoundObject.SetActive(roundsVisible);
+            playerUiElements.SecondRoundObject.SetActive(roundsVisible);
+            if (roundsVisible)
+            {
+                int roundsWon = playerUiElements.RoundsWon;
+                playerUiElements.FirstRound.texture = Resources.GetRoundTexture(roundsWon >= 1);
+                playerUiElements.SecondRound.texture = Resources.GetRoundTexture(roundsWon >= 2);
+            }
 
             var leftShiftStoneTexture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneLeft);
             var rightShiftStoneTexture = Resources.GetShiftStoneTexture(playerInfo.ShiftStoneRight);

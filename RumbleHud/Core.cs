@@ -31,6 +31,7 @@ namespace RumbleHud
         private string settingsFilePath = @"UserData\RumbleHud.xml";
 
         private string currentScene = "Loader";
+        private bool roundInProgress = false;
 
 
         public override void OnInitializeMelon()
@@ -72,6 +73,8 @@ namespace RumbleHud
             // We can use them to get the player's head, since the player
             // is headless.
             Hud.LoadPreviewCharacter();
+
+            Hud.ResetRoundTracking();
         }
 
         private bool IsHost(int playerCount, string playFabId, PlayerController playerController)
@@ -98,6 +101,18 @@ namespace RumbleHud
             if (photonView == null) return false;
 
             return photonView.OwnerActorNr == 1;
+        }
+
+        private void CalculateRoundTracking(List<PlayerInfo> playerInfos)
+        {
+            // Iterate over players. Increment the round counter for the one with non-zero health.
+            foreach (var playerInfo in playerInfos)
+            {
+                if (playerInfo.HP != 0)
+                {
+                    Hud.IncrementRound(playerInfo.PlayFabId);
+                }
+            }
         }
 
         public override void OnUpdate()
@@ -163,11 +178,20 @@ namespace RumbleHud
                 Hud.SetScale(Settings.Instance.HudScale - 0.1f);
             }
 
+            Hud.SetRoundsVisible(
+                playerManager?.AllPlayers?.Count == 2
+                && (
+                    currentScene == "Map0"
+                    || currentScene == "Map1"
+                ));
+
             // Update all player info.
             try
             {
                 List<PlayerInfo> newPlayerInfos = new List<PlayerInfo>();
 
+                bool allPlayersFullHp = true;
+                bool anyPlayerDead = false;
                 var playerEnumerator = playerManager?.AllPlayers?.GetEnumerator();
                 if (playerEnumerator == null) {
                     return;
@@ -175,6 +199,17 @@ namespace RumbleHud
                 while (playerEnumerator.MoveNext())
                 {
                     var current = playerEnumerator.Current;
+
+                    int hp = current.Data.HealthPoints;
+                    if (hp == 0)
+                    {
+                        anyPlayerDead = true;
+                    }
+                    if (hp != 20)
+                    {
+                        allPlayersFullHp = false;
+                    }
+
 
                     string playFabId = current.Data.GeneralData.PlayFabMasterId;
 
@@ -199,6 +234,21 @@ namespace RumbleHud
                     };
 
                     newPlayerInfos.Add(currentPlayerInfo);
+                }
+
+                if (allPlayersFullHp)
+                {
+                    roundInProgress = true;
+                    Hud.ResetRoundsIfWinnerPresent();
+                }
+                if (anyPlayerDead)
+                {
+                    if (roundInProgress)
+                    {
+                        CalculateRoundTracking(newPlayerInfos);
+                    }
+
+                    roundInProgress = false;
                 }
 
                 playerInfos = newPlayerInfos;
