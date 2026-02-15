@@ -17,7 +17,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.5.0", "Kpaiy", null)]
+[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.6.0", "Kpaiy", null)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 
 namespace RumbleHud
@@ -137,45 +137,48 @@ namespace RumbleHud
                 Hud.Initialize();
             }
 
-            if (Input.GetKeyDown(KeyCode.I))
+            if (!Settings.Instance.LockControls)
             {
-                Hud.ToggleVisible();
-            }
-
-            // Cycle host display mode.
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                // TODO: Surely there's a better way.
-                switch (Settings.Instance.HostIndicator)
+                if (Input.GetKeyDown(KeyCode.I))
                 {
-                    case HostIndicatorOptions.None:
-                        Settings.Instance.HostIndicator = HostIndicatorOptions.Text;
-                        break;
-                    case HostIndicatorOptions.Text:
-                        Settings.Instance.HostIndicator = HostIndicatorOptions.Icon;
-                        break;
-                    case HostIndicatorOptions.Icon:
-                        Settings.Instance.HostIndicator = HostIndicatorOptions.Both;
-                        break;
-                    case HostIndicatorOptions.Both:
-                        Settings.Instance.HostIndicator = HostIndicatorOptions.None;
-                        break;
+                    Hud.ToggleVisible();
                 }
-            }
 
-            // Regenerate portraits.
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                Hud.RegeneratePortraits(currentScene == "Gym");
-            }
+                // Cycle host display mode.
+                if (Input.GetKeyDown(KeyCode.O))
+                {
+                    // TODO: Surely there's a better way.
+                    switch (Settings.Instance.HostIndicator)
+                    {
+                        case HostIndicatorOptions.None:
+                            Settings.Instance.HostIndicator = HostIndicatorOptions.Text;
+                            break;
+                        case HostIndicatorOptions.Text:
+                            Settings.Instance.HostIndicator = HostIndicatorOptions.Icon;
+                            break;
+                        case HostIndicatorOptions.Icon:
+                            Settings.Instance.HostIndicator = HostIndicatorOptions.Both;
+                            break;
+                        case HostIndicatorOptions.Both:
+                            Settings.Instance.HostIndicator = HostIndicatorOptions.None;
+                            break;
+                    }
+                }
 
-            if (Input.GetKeyDown(KeyCode.Equals))
-            {
-                Hud.SetScale(Settings.Instance.HudScale + 0.1f);
-            }
-            if (Input.GetKeyDown(KeyCode.Minus))
-            {
-                Hud.SetScale(Settings.Instance.HudScale - 0.1f);
+                // Regenerate portraits.
+                if (Input.GetKeyDown(KeyCode.P))
+                {
+                    Hud.RegeneratePortraits(currentScene == "Gym");
+                }
+
+                if (Input.GetKeyDown(KeyCode.Equals))
+                {
+                    Hud.SetScale(Settings.Instance.HudScale + 0.1f);
+                }
+                if (Input.GetKeyDown(KeyCode.Minus))
+                {
+                    Hud.SetScale(Settings.Instance.HudScale - 0.1f);
+                }
             }
 
             Hud.SetRoundsVisible(

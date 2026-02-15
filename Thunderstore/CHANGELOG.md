@@ -1,3 +1,10 @@
+# Version 1.6.0
+
+- Implement `LockControls` settings option.
+  - You have to update the settings file manually to use this setting.
+
+I will be waiting for the next big patch to release before I integrate with ModUI, but it's definitely a future goal.
+
 # Version 1.5.0
 
 - Add round tracking during matches.

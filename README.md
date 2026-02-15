@@ -9,9 +9,11 @@ The mod will, for each player, display their:
   - Current Health
   - Equipped Shift Stones
   - Player Portrait
+  - Round scores (if in a match)
   - Host status (optional)
 
 ## Controls
+**Known Issue**: These controls *always* function, e.g. you could type a "-" in a ModUI text box and the HUD would get smaller.
 
 The mod currently uses the following controls:
   - `I` to toggle HUD on/off
@@ -25,6 +27,7 @@ The mod currently uses the following controls:
   - `-`/`=` (near the backspace key) to decrease/increase HUD scale
 
 The HUD scale currently saves to a settings file: `UserData/RumbleHud.xml`.
+
 **Note:** Settings save on game quit, so RUMBLE crashing might mean your 
 settings don't save.
 
@@ -35,6 +38,7 @@ settings don't save.
 | `HudScale` | float | 1.0 | The size of the HUD. Keep it strictly positive. Control in-game using `-` and `=`. |
 | `HostIndicator` | `None`, `Text`, `Icon`, or `Both` | `Text` | How to indicate who is host on the HUD. Cycle in-game using `O`. |
 | `HideSolo` | boolean (`true` or `false`) | `false` | Whether to auto-hide the HUD when you are the only player. Cannot be set in-game. |
+| `LockControls` | boolean (`true` or `false`) | `false` | When this is true, keyboard controls are disabled, preventing accidental changes. |
 
 ## Demo Footage (Click to View)
 
@@ -50,9 +54,7 @@ This mod requires:
 1. Extract the `Mods` and `UserData` folders into your RUMBLE install directory.
 
 ## Known Issues
-
-- Metals in Challenger's Pauldron (at least) are currently transparent in player portrait.
-- Incompatible with LIV camera
+- Keyboard controls are *always* listening, even if you're doing something like typing into a text field.
 - Portrait generation for the player only occurs when entering the gym
   - To update your own portrait, press `P` while you are in the gym
 - Opponents can have their portrait taken while they're in awfully unflattering poses, e.g. full scorpion.
@@ -61,20 +63,16 @@ This mod requires:
   - This is also funny as hell, not fixing this
 
 ## Future Goals
-
-- Allow for portrait regeneration on key press.
 - Extensive config with `rumblehud.xml`
   - Allow deeply customisable HUDs by having element positionings be config values.
-- Investigate LIV support
-- Integrate with RumbleModUI to expose configuration options:
+- Integrate with RumbleModUI to expose configuration options instead of using keyboard controls:
   - Hide or show HUD
   - Re-generate player portraits
   - Rearrange ordering of players on the HUD.
 - Support for NameBending
-- Score tracking
 - Make shift stone icons pulse/shimmer when triggered/active
 - Is it possible to use OSC or host a server? Something that could expose this information outside of RUMBLE, so someone familiar with OBS could make their own elements in OBS instead using this info?
-  - This could be a workaround for supporting LIV for serious streaming setups.
+  - Gort  is working on an OBS HUD!
 
 ## Support
 

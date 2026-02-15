@@ -24,6 +24,7 @@ namespace RumbleHud
         public float HudScale {  get; set; }
         public HostIndicatorOptions HostIndicator {  get; set; }
         public bool HideSolo { get; set; }
+        public bool LockControls { get; set; } // When this is true, keyboard controls cannot change the HUD.
 
         public static Settings FromJson(string jsonString)
         {
@@ -37,6 +38,7 @@ namespace RumbleHud
                 HudScale = 1.0f,
                 HostIndicator = HostIndicatorOptions.Text,
                 HideSolo = false,
+                LockControls = false,
             };
             Instance = newInstance;
             return newInstance;
