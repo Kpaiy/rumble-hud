@@ -81,8 +81,6 @@ namespace RumbleHud
         public static void SetRoundsVisible(bool visible)
         {
             roundsVisible = visible;
-
-
         }
 
         public static void SetScale(float newScale)
@@ -107,6 +105,10 @@ namespace RumbleHud
             }
         }
 
+        /**
+         * This function is no longer needed. Now that the playing player has their own heads visible to
+         * external cameras, we can simply treat ourselves like we would any other player.
+         */
         public static void LoadPreviewCharacter()
         {
             previewHead = GameObject.Find("--------------LOGIC--------------/Dressing Room/Preview Player Controller/Visuals/Skelington/Bone_Pelvis/Bone_Spine_A/Bone_Chest/Bone_Neck/Bone_Head");
@@ -688,7 +690,7 @@ namespace RumbleHud
 
         private static GameObject GetPlayerHead(string playFabId, PlayerController playerController)
         {
-            if (playFabId == SelfPlayFabId) return previewHead;
+            // if (playFabId == SelfPlayFabId) return previewHead;
 
             if (playerController == null) return null;
 
@@ -716,19 +718,14 @@ namespace RumbleHud
                 ?.GetChild(4) // Spine
                 ?.GetChild(0) // Chest
                 ?.GetChild(0) // Neck
-                ?.GetChild(0) // Head
-                ?.GetChild(9); // Nose
+                ?.GetChild(0); // Head
+                //?.GetChild(9); // Nose
 
             return noseTransform?.gameObject;
         }
 
         private static GameObject GetPlayerVisuals(string playFabId, PlayerController playerController)
         {
-            if (playFabId == SelfPlayFabId)
-            {
-                return GetPlayerHead(playFabId, null);
-            };
-
             if (playerController == null) return null;
 
             var controllerObject = playerController.gameObject;
@@ -754,28 +751,10 @@ namespace RumbleHud
             camera.transform.RotateAround(head.transform.position, camera.transform.up, facingLeft ? -30 : 30);
         }
 
-        public static void RegeneratePortraits(bool regenerateSelf)
+        public static void RegeneratePortraits()
         {
-            // Regenerate self
-            if (regenerateSelf)
-            {
-                var selfUiElements = uiElementsByPlayer[SelfPlayFabId];
-                if (selfUiElements == null) return;
-
-                selfUiElements.PortraitGenerated = portraitGenerationTime;
-                selfUiElements.HeadshotCamera.gameObject.SetActive(true);
-                
-                return;
-            }
-
-            // Regenerate others
             foreach (var playerUiElements in uiElementsByPlayer.Values)
             {
-                if (playerUiElements.PlayFabId == SelfPlayFabId)
-                {
-                    continue;
-                }
-
                 playerUiElements.PortraitGenerated = portraitGenerationTime;
                 playerUiElements.HeadshotCamera.gameObject.SetActive(true);
             }
@@ -785,13 +764,6 @@ namespace RumbleHud
         {
             foreach (var playerUiElements in uiElementsByPlayer.Values)
             {
-                // Don't clear self normally.
-                // Currently, I only know how to generate self portrait while in the gym.
-                if (playerUiElements.PlayFabId == SelfPlayFabId && !includeSelfPlayer)
-                {
-                    continue;
-                }
-
                 GameObject.Destroy(playerUiElements.Container);
                 playerUiElements.HeadshotCamera.targetTexture = null;
                 GameObject.Destroy(playerUiElements.HeadshotCamera.gameObject);
