@@ -47,7 +47,7 @@ settings don't save.
 ## Dependencies
 
 This mod requires:
- - MelonLoader 0.7.0
+ - MelonLoader Nightly
 
 ## Installation Instructions
 
@@ -55,11 +55,9 @@ This mod requires:
 
 ## Known Issues
 - Keyboard controls are *always* listening, even if you're doing something like typing into a text field.
-- Portrait generation for the player only occurs when entering the gym
-  - To update your own portrait, press `P` while you are in the gym
-- Opponents can have their portrait taken while they're in awfully unflattering poses, e.g. full scorpion.
+- People can have their portrait taken while they're in awfully unflattering poses, e.g. full scorpion.
   - This is funny as hell, not fixing this
-- In parks, if you're unlucky, other player portraits can be photobombed
+- In parks, if you're unlucky, player portraits can be photobombed
   - This is also funny as hell, not fixing this
 
 ## Future Goals
