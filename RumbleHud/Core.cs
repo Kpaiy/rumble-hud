@@ -249,7 +249,7 @@ namespace RumbleHud
 			}
 			catch (Exception ex)
 			{
-				MelonLogger.Error(ex);
+				//MelonLogger.Error(ex);
 			}
 
 			// Make new canvases if required, update if existing, for each player.
@@ -290,7 +290,7 @@ namespace RumbleHud
 			}
 			catch (Exception ex)
 			{
-				LoggerInstance.Error(ex);
+				//lLoggerInstance.Error(ex);
 			}
 
 			// base.OnUpdate();
