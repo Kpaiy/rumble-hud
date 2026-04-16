@@ -248,7 +248,7 @@ namespace RumbleHud
 			}
 			catch (Exception ex)
 			{
-				// MelonLogger.Error(ex);
+				MelonLogger.Error(ex);
 			}
 
 			// Make new canvases if required, update if existing, for each player.
@@ -283,13 +283,13 @@ namespace RumbleHud
 					}
 					catch (Exception ex)
 					{
-						// LoggerInstance.Error(ex);
+						LoggerInstance.Error(ex);
 					}
 				}
 			}
 			catch (Exception ex)
 			{
-				// LoggerInstance.Error(ex);
+				LoggerInstance.Error(ex);
 			}
 
 			// base.OnUpdate();
