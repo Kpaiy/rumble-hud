@@ -87,7 +87,7 @@ namespace RumbleHud
 		internal static MelonPreferences_Category RumbleHudCategory;
 		internal static MelonPreferences_Entry<bool> PrefIsVisible;
 		internal static MelonPreferences_Entry<float> PrefHudScale;
-		internal static MelonPreferences_Entry<HostIndicatorOptions> PrefHostIndicatorOptions;
+		internal static MelonPreferences_Entry<HostIndicatorOptions> PrefHostIndicator;
 		internal static MelonPreferences_Entry<bool> PrefHideSolo;
 		internal static MelonPreferences_Entry<bool> PrefLockControls;
 
@@ -104,7 +104,7 @@ namespace RumbleHud
 
 			PrefIsVisible = RumbleHudCategory.CreateEntry("HudIsVisible", true, "Display Hud", "Display or hide HUD");
 			PrefHudScale = RumbleHudCategory.CreateEntry("HudScale", 1.0f, "Hud Scale", "The size of the HUD. Keep it strictly positive. Control in-game using - and =.");
-			PrefHostIndicatorOptions = RumbleHudCategory.CreateEntry("HostIndicator", HostIndicatorOptions.Text, "Host Indicator", "How to indicate who is host on the HUD. Cycle in-game using O.");
+			PrefHostIndicator = RumbleHudCategory.CreateEntry("HostIndicator", HostIndicatorOptions.Text, "Host Indicator", "How to indicate who is host on the HUD. Cycle in-game using O.");
 			PrefHideSolo = RumbleHudCategory.CreateEntry("HideSolo", false, "Hide Solo", "Whether to auto-hide the HUD when you are the only player. Cannot be set in-game.");
 			PrefLockControls = RumbleHudCategory.CreateEntry("LockControls", false, "Lock Controls", "When this is true, keyboard controls are disabled, preventing accidental changes.");
 
@@ -116,19 +116,43 @@ namespace RumbleHud
 		}
 
 
+		internal static void CheckIfXmlMigrated()
+		{
+			if (XmlMigrated.Value)
+				return;
+			if (!File.Exists(@"UserData\RumbleHud.xml"))
+				return;
+			try
+			{
+				Melon<Core>.Logger.Msg("Not previously migrated from XML. Attempting migration");
+				Settings oldSettings = Settings.FromXmlFile(@"UserData\RumbleHud.xml");
 
+				PrefHudScale.Value = oldSettings.HudScale;
+				PrefHostIndicator.Value = oldSettings.HostIndicator;
+				PrefHideSolo.Value = oldSettings.HideSolo;
+				PrefLockControls.Value = oldSettings.LockControls;
+				ApplyPrefs();
+				XmlMigrated.Value = true;
+				File.Delete(@"UserData\RumbleHud.xml");
+			}
+			catch (Exception ex) 
+			{
+				Melon<Core>.Logger.Msg($"Error in XML to Melonpreferences migration attempt: {ex.Message}");
+			}
+		}
 		internal static void ApplyPrefs()
 		{
 			IsVisible = PrefIsVisible.Value;
 			HudScale = PrefHudScale.Value;
-			HostIndicator = PrefHostIndicatorOptions.Value;
+			HostIndicator = PrefHostIndicator.Value;
 			HideSolo = PrefHideSolo.Value;
 			LockControls = PrefLockControls.Value;
 
-			Hud.ClearPlayerUi();
 			Hud.SetVisible(IsVisible);
 			Hud.SetScale(HudScale);
+			Hud.ClearPlayerUi();
 		}
 
 	}
 }
+ 
