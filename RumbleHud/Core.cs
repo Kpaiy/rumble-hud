@@ -162,12 +162,13 @@ namespace RumbleHud
 
 				if (Input.GetKeyDown(KeyCode.Equals))
 				{
-					Hud.SetScale(Preferences.HudScale + 0.1f);
+					Hud.SetScale(Preferences.HudScale += 0.1f);
 				}
 				if (Input.GetKeyDown(KeyCode.Minus))
 				{
-					Hud.SetScale(Preferences.HudScale - 0.1f);
+					Hud.SetScale(Preferences.HudScale -= 0.1f);
 				}
+				Preferences.PrefHudScale.Value = Preferences.HudScale;
 			}
 
 			Hud.SetRoundsVisible(

@@ -74,7 +74,8 @@ namespace RumbleHud
 
 	internal static class Preferences
 	{
-		//loaded preferences
+		//loaded preference values
+		public static bool IsVisible { get; set; }
 		public static float HudScale { get; set; }
 		public static HostIndicatorOptions HostIndicator { get; set; }
 		public static bool HideSolo { get; set; }
@@ -84,6 +85,7 @@ namespace RumbleHud
 		private const string CONFIG_FILE = "config.cfg";
 		private const string USER_DATA = "UserData/RumbleHudData/";
 		internal static MelonPreferences_Category RumbleHudCategory;
+		internal static MelonPreferences_Entry<bool> PrefIsVisible;
 		internal static MelonPreferences_Entry<float> PrefHudScale;
 		internal static MelonPreferences_Entry<HostIndicatorOptions> PrefHostIndicatorOptions;
 		internal static MelonPreferences_Entry<bool> PrefHideSolo;
@@ -100,6 +102,7 @@ namespace RumbleHud
 			RumbleHudCategory = MelonPreferences.CreateCategory("RumbleHUD", "Rumble HUD");
 			RumbleHudCategory.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 
+			PrefIsVisible = RumbleHudCategory.CreateEntry("HudIsVisible", true, "Display Hud", "Display or hide HUD");
 			PrefHudScale = RumbleHudCategory.CreateEntry("HudScale", 1.0f, "Hud Scale", "The size of the HUD. Keep it strictly positive. Control in-game using - and =.");
 			PrefHostIndicatorOptions = RumbleHudCategory.CreateEntry("HostIndicator", HostIndicatorOptions.Text, "Host Indicator", "How to indicate who is host on the HUD. Cycle in-game using O.");
 			PrefHideSolo = RumbleHudCategory.CreateEntry("HideSolo", false, "Hide Solo", "Whether to auto-hide the HUD when you are the only player. Cannot be set in-game.");
@@ -108,17 +111,23 @@ namespace RumbleHud
 			HiddenCategory = MelonPreferences.CreateCategory("HiddenCategory", "Hidden Category");
 			HiddenCategory.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));
 			XmlMigrated = HiddenCategory.CreateEntry("XmlMigrated", false, "XML Settings Migrated", "For initial migration into MelonPreferences. Setting to false would look for the XML file and apply the settings to the preferences");
+
+			ApplyPrefs();
 		}
 
 
 
 		internal static void ApplyPrefs()
 		{
+			IsVisible = PrefIsVisible.Value;
 			HudScale = PrefHudScale.Value;
 			HostIndicator = PrefHostIndicatorOptions.Value;
 			HideSolo = PrefHideSolo.Value;
 			LockControls = PrefLockControls.Value;
 
+			Hud.ClearPlayerUi();
+			Hud.SetVisible(IsVisible);
+			Hud.SetScale(HudScale);
 		}
 
 	}
