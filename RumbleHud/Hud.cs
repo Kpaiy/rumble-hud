@@ -85,7 +85,7 @@ namespace RumbleHud
 
         public static void SetScale(float newScale)
         {
-            Settings.Instance.HudScale = newScale;
+            Preferences.HudScale = newScale;
 
             foreach (var playerUiElements in uiElementsByPlayer.Values)
             {
@@ -161,7 +161,7 @@ namespace RumbleHud
         public static void CreatePlayerUi(PlayerInfo playerInfo, int position)
         {
             bool isRightAligned = position % 2 == 1;
-            int offset = (int)((position / 2) * 150 * -1 * Settings.Instance.HudScale);
+            int offset = (int)((position / 2) * 150 * -1 * Preferences.HudScale);
 
             // BACKGROUND
 
@@ -586,7 +586,7 @@ namespace RumbleHud
                 portraitImageTransform.anchoredPosition = new Vector2(0, 0);
             }
 
-            var scale = Settings.Instance.HudScale;
+            var scale = Preferences.HudScale;
             backgroundObject.transform.localScale = new Vector3(scale, scale, scale);
 
             uiElementsByPlayer[playerInfo.PlayFabId] = new PlayerUiElements
@@ -665,11 +665,11 @@ namespace RumbleHud
             playerUiElements.ShiftStoneRight.texture = rightShiftStoneTexture;
 
             playerUiElements.HostText.gameObject.active = playerInfo.IsHost && (
-                Settings.Instance.HostIndicator == HostIndicatorOptions.Text ||
-                Settings.Instance.HostIndicator == HostIndicatorOptions.Both);
+                Preferences.HostIndicator == HostIndicatorOptions.Text ||
+                Preferences.HostIndicator == HostIndicatorOptions.Both);
             playerUiElements.HostIcon.gameObject.active = playerInfo.IsHost && (
-                Settings.Instance.HostIndicator == HostIndicatorOptions.Icon ||
-                Settings.Instance.HostIndicator == HostIndicatorOptions.Both);
+                Preferences.HostIndicator == HostIndicatorOptions.Icon ||
+                Preferences.HostIndicator == HostIndicatorOptions.Both);
 
             if (playerUiElements.PortraitGenerated > 0)
             {

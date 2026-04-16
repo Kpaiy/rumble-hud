@@ -42,6 +42,13 @@
 	<ItemGroup>
 	  <Folder Include="Resources\" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="UIFramework">
+	    <HintPath>G:\SteamLibrary\steamapps\common\RUMBLE\Mods\UIFramework.dll</HintPath>
+	    <Private>True</Private>
+	  </Reference>
+	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="COPY &quot;$(TargetPath)&quot; &quot;$(RumblePath)\Mods&quot;" />
