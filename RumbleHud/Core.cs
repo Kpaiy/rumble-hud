@@ -46,7 +46,7 @@ namespace RumbleHud
 			//Register to UI Framework and subscribe to OnModSaved;
 			//The explicit cast to MelonBase isn't required. But it forces the compiler to avoid the old Register function that will be removed in future versions
 			//This way, when that version releases, RumbleHUD won't need to be updated
-			UI.Register((MelonBase)this, Preferences.RumbleHudCategory).OnModSaved += Preferences.ApplyPrefs;
+			UI.RegisterMelon((MelonBase)this, Preferences.RumbleHudCategory).OnModSaved += Preferences.ApplyPrefs;
 			Preferences.CheckIfXmlMigrated();
 		}
 
@@ -231,8 +231,10 @@ namespace RumbleHud
 						PlayerController = current.Controller,
 						IsHost = isHost,
 					};
-
-					newPlayerInfos.Add(currentPlayerInfo);
+					if(!newPlayerInfos.Any(p => p.PlayFabId == currentPlayerInfo.PlayFabId))
+					{
+						newPlayerInfos.Add(currentPlayerInfo);
+					}
 				}
 
 				if (allPlayersFullHp)
