@@ -75,24 +75,24 @@ namespace RumbleHud
 	internal static class Preferences
 	{
 		//loaded preference values
-		public static bool IsVisible { get; set; }
-		public static float HudScale { get; set; }
-		public static HostIndicatorOptions HostIndicator { get; set; }
-		public static bool HideSolo { get; set; }
-		public static bool LockControls { get; set; } // When this is true, keyboard controls cannot change the HUD.
+		public static bool IsVisible { get => Preferences.PrefIsVisible.Value; set => Preferences.PrefIsVisible.Value = value; }
+		public static float HudScale { get => Preferences.PrefHudScale.Value; set => Preferences.PrefHudScale.Value = value; }
+		public static HostIndicatorOptions HostIndicator { get => Preferences.PrefHostIndicator.Value; set => Preferences.PrefHostIndicator.Value = value; }
+		public static bool HideSolo { get => Preferences.PrefHideSolo.Value; set => Preferences.PrefHideSolo.Value = value; }
+		public static bool LockControls { get => Preferences.PrefLockControls.Value; set => Preferences.PrefLockControls.Value = value; } // When this is true, keyboard controls cannot change the HUD.
 
 
 		private const string CONFIG_FILE = "config.cfg";
 		private const string USER_DATA = "UserData/RumbleHudData/";
 		internal static MelonPreferences_Category RumbleHudCategory;
-		internal static MelonPreferences_Entry<bool> PrefIsVisible;
-		internal static MelonPreferences_Entry<float> PrefHudScale;
-		internal static MelonPreferences_Entry<HostIndicatorOptions> PrefHostIndicator;
-		internal static MelonPreferences_Entry<bool> PrefHideSolo;
-		internal static MelonPreferences_Entry<bool> PrefLockControls;
-
-		internal static MelonPreferences_Category HiddenCategory;
-		internal static MelonPreferences_Entry<bool> XmlMigrated;
+		private static MelonPreferences_Entry<bool> PrefIsVisible;
+		private static MelonPreferences_Entry<float> PrefHudScale;
+		private static MelonPreferences_Entry<HostIndicatorOptions> PrefHostIndicator;
+		private static MelonPreferences_Entry<bool> PrefHideSolo;
+		private static MelonPreferences_Entry<bool> PrefLockControls;
+	
+		private static MelonPreferences_Category HiddenCategory;
+		private static MelonPreferences_Entry<bool> XmlMigrated;
 
 		internal static void InitPrefs()
 		{
@@ -142,14 +142,8 @@ namespace RumbleHud
 		}
 		internal static void ApplyPrefs()
 		{
-			IsVisible = PrefIsVisible.Value;
-			HudScale = PrefHudScale.Value;
-			HostIndicator = PrefHostIndicator.Value;
-			HideSolo = PrefHideSolo.Value;
-			LockControls = PrefLockControls.Value;
-
-			Hud.SetVisible(IsVisible);
-			Hud.SetScale(HudScale);
+			Hud.SetVisible(PrefIsVisible.Value);
+			Hud.SetScale(PrefHudScale.Value);
 			Hud.ClearPlayerUi();
 		}
 

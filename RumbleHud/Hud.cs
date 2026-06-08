@@ -60,8 +60,8 @@ namespace RumbleHud
 
             GameObject.DontDestroyOnLoad(uiContainer);
             GameObject.DontDestroyOnLoad(canvas);
-
-            initialized = true;
+			Hud.SetVisible(Preferences.IsVisible);
+			initialized = true;
         }
 
         public static void ToggleVisible()

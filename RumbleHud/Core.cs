@@ -44,9 +44,7 @@ namespace RumbleHud
 
 			Preferences.InitPrefs();
 			//Register to UI Framework and subscribe to OnModSaved;
-			//The explicit cast to MelonBase isn't required. But it forces the compiler to avoid the old Register function that will be removed in future versions
-			//This way, when that version releases, RumbleHUD won't need to be updated
-			UI.RegisterMelon((MelonBase)this, Preferences.RumbleHudCategory).OnModSaved += Preferences.ApplyPrefs;
+			UI.RegisterMelon(this, Preferences.RumbleHudCategory).OnModSaved += Preferences.ApplyPrefs;
 			Preferences.CheckIfXmlMigrated();
 		}
 
@@ -164,12 +162,12 @@ namespace RumbleHud
 				if (Input.GetKeyDown(KeyCode.Equals))
 				{
 					Hud.SetScale(Preferences.HudScale += 0.1f);
-					Preferences.PrefHudScale.Value = Preferences.HudScale;
+					Preferences.HudScale = Preferences.HudScale;
 				}
 				if (Input.GetKeyDown(KeyCode.Minus))
 				{
 					Hud.SetScale(Preferences.HudScale -= 0.1f);
-					Preferences.PrefHudScale.Value = Preferences.HudScale;
+					Preferences.HudScale = Preferences.HudScale;
 				}
 
 				
