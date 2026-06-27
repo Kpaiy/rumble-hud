@@ -13,7 +13,7 @@ The mod will, for each player, display their:
   - Host status (optional)
 
 ## Controls
-**Known Issue**: These controls *always* function, e.g. you could type a "-" in a ModUI text box and the HUD would get smaller.
+**Known Issue**: These controls *always* function (when enabled), e.g. you could type a "-" in a UI text box and the HUD would get smaller.
 
 The mod currently uses the following controls:
   - `I` to toggle HUD on/off
@@ -33,12 +33,14 @@ settings don't save.
 
 ## Settings File
 
-| Setting Key | Type | Default Value | Description |
+**Note:** This settings file is no longer used. RumbleHud has been migrated to use UIFramework to expose settings. Your settings will be migrated across into the new system.
+
+<!-- | Setting Key | Type | Default Value | Description |
 |-------------|------|---------------|-------------|
 | `HudScale` | float | 1.0 | The size of the HUD. Keep it strictly positive. Control in-game using `-` and `=`. |
 | `HostIndicator` | `None`, `Text`, `Icon`, or `Both` | `Text` | How to indicate who is host on the HUD. Cycle in-game using `O`. |
 | `HideSolo` | boolean (`true` or `false`) | `false` | Whether to auto-hide the HUD when you are the only player. Cannot be set in-game. |
-| `LockControls` | boolean (`true` or `false`) | `false` | When this is true, keyboard controls are disabled, preventing accidental changes. |
+| `LockControls` | boolean (`true` or `false`) | `false` | When this is true, keyboard controls are disabled, preventing accidental changes. | -->
 
 ## Demo Footage (Click to View)
 
@@ -48,29 +50,25 @@ settings don't save.
 
 This mod requires:
  - MelonLoader Nightly
+ - [UIFramework](https://old.thunderstore.io/c/rumble/p/Reverb_and___and_Spice/UIFramework/)
 
 ## Installation Instructions
 
 1. Extract the `Mods` and `UserData` folders into your RUMBLE install directory.
 
 ## Known Issues
-- Keyboard controls are *always* listening, even if you're doing something like typing into a text field.
+- Keyboard controls are *always* listening (when enabled), even if you're doing something like typing into a text field.
 - People can have their portrait taken while they're in awfully unflattering poses, e.g. full scorpion.
   - This is funny as hell, not fixing this
 - In parks, if you're unlucky, player portraits can be photobombed
   - This is also funny as hell, not fixing this
 
 ## Future Goals
-- Extensive config with `rumblehud.xml`
-  - Allow deeply customisable HUDs by having element positionings be config values.
-- Integrate with RumbleModUI to expose configuration options instead of using keyboard controls:
-  - Hide or show HUD
-  - Re-generate player portraits
-  - Rearrange ordering of players on the HUD.
+- Allow deeply customisable HUDs by having element positionings be config values.
 - Support for NameBending
 - Make shift stone icons pulse/shimmer when triggered/active
 - Is it possible to use OSC or host a server? Something that could expose this information outside of RUMBLE, so someone familiar with OBS could make their own elements in OBS instead using this info?
-  - Gort  is working on an OBS HUD!
+  - Gort is working on an OBS HUD!
 
 ## Support
 
@@ -81,6 +79,7 @@ I can't guarantee fast response times, but I'll do what I can. ^-^
 
 - **SDRAWKCABMIAY** for providing shift stone graphics.
 - **Pep** for helping me with host in park lunacy. He is why I am sane enough to type this.
+- **iListen2Sound** for single-handedly migrating this project to use UIFramework for settings.
 - Testers:
   - **Jman**
   - **Rhymenocerous**

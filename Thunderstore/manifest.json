@@ -1,9 +1,10 @@
 {
   "name": "RumbleHud",
   "description": "Adds a HUD to the RUMBLE desktop window for spectator experience.",
-  "version_number": "1.7.0",
+  "version_number": "1.8.0",
   "dependencies": [
-    "LavaGang-MelonLoader-0.7.1"
+    "LavaGang-MelonLoader-0.7.1",
+    "Reverb_and___and_Spice-UIFramework-0.10.2"
   ],
   "website_url": "https://github.com/Kpaiy/rumble-hud"
 }

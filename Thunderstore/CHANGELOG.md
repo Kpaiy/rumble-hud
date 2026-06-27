@@ -1,3 +1,11 @@
+# Version 1.8.0
+
+**iListen2Sound** has done incredible work and ported this mod to use UIFramework for mod settings.
+
+The only thing I've done (for my own entertainment) is add a new setting to add live player portraits. That is, they are no longer still images, but continuous video feeds.
+
+**Note:** This setting could impact performance. Use at own risk.
+
 # Version 1.7.0
 
 Update HUD to Support RUMBLE 0.5!

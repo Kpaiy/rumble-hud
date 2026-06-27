@@ -19,7 +19,7 @@ using UnityEngine.UI;
 
 using UIFramework;
 
-[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.7.0", "Kpaiy", null)]
+[assembly: MelonInfo(typeof(RumbleHud.Core), "RumbleHud", "1.8.0", "Kpaiy", null)]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonAdditionalDependencies("UIFramework")]
 
