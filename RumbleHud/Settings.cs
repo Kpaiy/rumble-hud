@@ -121,7 +121,11 @@ namespace RumbleHud
 			if (XmlMigrated.Value)
 				return;
 			if (!File.Exists(@"UserData\RumbleHud.xml"))
-				return;
+			{
+				// There's no file to migrate. Don't try again.
+                XmlMigrated.Value = true;
+                return;
+			}
 			try
 			{
 				Melon<Core>.Logger.Msg("Not previously migrated from XML. Attempting migration");
