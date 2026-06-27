@@ -81,6 +81,8 @@ namespace RumbleHud
 		public static bool HideSolo { get => Preferences.PrefHideSolo.Value; set => Preferences.PrefHideSolo.Value = value; }
 		public static bool LockControls { get => Preferences.PrefLockControls.Value; set => Preferences.PrefLockControls.Value = value; } // When this is true, keyboard controls cannot change the HUD.
 
+		public static bool LivePortraits { get => Preferences.PrefLivePortraits.Value; set => PrefLivePortraits.Value = value; }
+
 
 		private const string CONFIG_FILE = "config.cfg";
 		private const string USER_DATA = "UserData/RumbleHudData/";
@@ -90,6 +92,7 @@ namespace RumbleHud
 		private static MelonPreferences_Entry<HostIndicatorOptions> PrefHostIndicator;
 		private static MelonPreferences_Entry<bool> PrefHideSolo;
 		private static MelonPreferences_Entry<bool> PrefLockControls;
+		private static MelonPreferences_Entry<bool> PrefLivePortraits;
 	
 		private static MelonPreferences_Category HiddenCategory;
 		private static MelonPreferences_Entry<bool> XmlMigrated;
@@ -105,8 +108,9 @@ namespace RumbleHud
 			PrefIsVisible = RumbleHudCategory.CreateEntry("HudIsVisible", true, "Display Hud", "Display or hide HUD");
 			PrefHudScale = RumbleHudCategory.CreateEntry("HudScale", 1.0f, "Hud Scale", "The size of the HUD. Keep it strictly positive. Control in-game using - and =.");
 			PrefHostIndicator = RumbleHudCategory.CreateEntry("HostIndicator", HostIndicatorOptions.Text, "Host Indicator", "How to indicate who is host on the HUD. Cycle in-game using O.");
-			PrefHideSolo = RumbleHudCategory.CreateEntry("HideSolo", false, "Hide Solo", "Whether to auto-hide the HUD when you are the only player. Cannot be set in-game.");
+			PrefHideSolo = RumbleHudCategory.CreateEntry("HideSolo", false, "Hide Solo", "Whether to auto-hide the HUD when you are the only player.");
 			PrefLockControls = RumbleHudCategory.CreateEntry("LockControls", false, "Lock Controls", "When this is true, keyboard controls are disabled, preventing accidental changes.");
+			PrefLivePortraits = RumbleHudCategory.CreateEntry("LivePortraits", false, "Live Portraits", "[DEMANDING] When this is enabled, portraits are a live feed of the player. This may impact game performance.");
 
 			HiddenCategory = MelonPreferences.CreateCategory("HiddenCategory", "Hidden Category");
 			HiddenCategory.SetFilePath(Path.Combine(USER_DATA, CONFIG_FILE));

@@ -671,7 +671,11 @@ namespace RumbleHud
                 Preferences.HostIndicator == HostIndicatorOptions.Icon ||
                 Preferences.HostIndicator == HostIndicatorOptions.Both);
 
-            if (playerUiElements.PortraitGenerated > 0)
+            if (Preferences.LivePortraits && !playerUiElements.HeadshotCamera.gameObject.active)
+            {
+                playerUiElements.HeadshotCamera.gameObject.SetActive(true);
+            }
+            else if (playerUiElements.PortraitGenerated > 0)
             {
                 playerUiElements.HeadshotCamera.gameObject.SetActive(false);
             }
