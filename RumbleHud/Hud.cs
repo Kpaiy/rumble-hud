@@ -680,14 +680,17 @@ namespace RumbleHud
                 playerUiElements.HeadshotCamera.gameObject.SetActive(false);
             }
 
-            if (playerUiElements.PortraitGenerated <= 0)
+            if (playerUiElements.PortraitGenerated <= 0 || Preferences.LivePortraits)
             {
                 GameObject head = GetPlayerHead(playerInfo.PlayFabId, playerInfo.PlayerController);
                 GameObject visuals = GetPlayerVisuals(playerInfo.PlayFabId, playerInfo.PlayerController);
                 if (head != null)
                 {
                     PointCamera(playerUiElements.HeadshotCamera, head, visuals, playerUiElements.IsRightAligned);
-                    playerUiElements.PortraitGenerated++;
+                    if (!Preferences.LivePortraits)
+                    {
+                        playerUiElements.PortraitGenerated++;
+                    }
                 }
             }
         }
