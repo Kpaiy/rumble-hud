@@ -1,3 +1,7 @@
+# Version 1.8.1
+
+Fix the live portrait mode. It wouldn't follow the player...
+
 # Version 1.8.0
 
 **iListen2Sound** has done incredible work and ported this mod to use UIFramework for mod settings.
